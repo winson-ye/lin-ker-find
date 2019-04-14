@@ -1,10 +1,8 @@
 from matplotlib import pyplot as plt
 from matplotlib.widgets import Button
-from matplotlib.lines import Line2D as li2d
 
 class LineBuilder:
     def __init__(self, line):
-        line.set_data([], [])
         self.line = line
         self.xs = list()
         self.ys = list()
@@ -18,23 +16,30 @@ class LineBuilder:
         self.line.set_data(self.xs, self.ys)
         self.line.figure.canvas.draw()
 
-    def finish(self, event):
+    def __finish(self, event):
+        """
+        connect the polygon back to the first point.
+        """
         self.xs.append(self.xs[0])
         self.ys.append(self.ys[0])
         self.line.set_data(self.xs, self.ys)
         self.line.figure.canvas.draw()
         self.line.figure.canvas.mpl_disconnect(self.cid)
 
-fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.set_title('click done when finished creating polygon')
-plt.subplots_adjust(bottom=0.2)
+def main():
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.set_title('click done to create your polygon')
+    plt.subplots_adjust(bottom=0.2)
 
-axdone = plt.axes([0.81, 0.05, 0.1, 0.075])
-bdone = Button(axdone, 'Done')
+    axdone = plt.axes([0.81, 0.05, 0.1, 0.075])
+    bdone = Button(axdone, 'Done')
 
-line, = ax.plot([0], [0], marker = 'o')  # empty line
-linebuilder = LineBuilder(line)
-bdone.on_clicked(linebuilder.finish)
+    line, = ax.plot([], [], marker = 'o')
+    linebuilder = LineBuilder(line)
+    bdone.on_clicked(linebuilder.__finish)
 
-plt.show()
+    plt.show()
+
+if __name__ == '__main__':
+    main()
