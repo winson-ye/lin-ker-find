@@ -82,6 +82,7 @@ class StructuredPoly:
 
 
 # Class testing
+"""
 node = Node((1, 1))
 print(node.getCoords())
 node.setCoords((2, 2))
@@ -96,7 +97,7 @@ print(lam.getDirection())
 k = K()
 
 poly = StructuredPoly([(0, 0), (1, 0), (0, 1)])
-
+"""
 
 
 
