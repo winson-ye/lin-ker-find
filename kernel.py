@@ -115,7 +115,7 @@ def _reflex(i, P, K, F, L):
 # Compute next L node in K
     L.append(L[i])
     X = L[i].next
-    while((ccw(X.prev, X, X.next) == -1) && (X != L[i])):
+    while(ccw(X.prev, X, X.next) == -1 and X != L[i]):
         X = X.next
     if X != L[i]:
         L[i+1] = X
