@@ -34,7 +34,7 @@ def ccw(a, b, c):
 def findIntersection(v1, v2, u1, u2):
 	p1 = p2 = q1 = q2 = None
 	v1_v2_is_ray = u1_u2_is_ray = False
-	
+
 	### Handle the inputs v1 and v2 and determine if they denote a line segment or ray
 	# If v1 is a Lambda and v2 is a Node or vice versa
 	if ((type(v1) == Lambda) and (type(v2) == Node)) or ((type(v1) == Node) and (type(v2) == Lambda)):
@@ -51,7 +51,7 @@ def findIntersection(v1, v2, u1, u2):
 
 		elif type(v2) == Lambda:
 			p1 = v1.coords
-			
+
 			if type(v2.next) == Node:
 				p2 = (v1.coords[0] - v2.direction[0], v1.coords[1] - v2.direction[1])
 
@@ -89,7 +89,7 @@ def findIntersection(v1, v2, u1, u2):
 
 		elif type(u2) == Lambda:
 			q1 = u1.coords
-			
+
 			if type(u2.next) == Node:
 				q2 = (u1.coords[0] - u2.direction[0], u1.coords[1] - u2.direction[1])
 
@@ -118,10 +118,10 @@ def findIntersection(v1, v2, u1, u2):
 		print("Determinant is 0")
 		return None
 
-	
+
 	t0 = (((q1[1] - q2[1]) * (p1[0] - q1[0])) + ((q2[0] - q1[0]) * (p1[1] - q1[1]))) / determinant
 	t1 = (((p1[1] - p2[1]) * (p1[0] - q1[0])) + ((p2[0] - p1[0]) * (p1[1] - q1[1]))) / determinant
-	
+
 	intersection = (p1[0] + t0 * (p2[0] - p1[0]), p1[1] + t0 * (p2[1] - p1[1]))
 	#intersection1 = (q1[0] + t1 * (q2[0] - q1[0]), q1[1] + t1 * (q2[1] - q1[1]))
 	#print("Bool:	" + str(intersection == intersection1))
@@ -129,7 +129,7 @@ def findIntersection(v1, v2, u1, u2):
 	#print("t1:	" + str(t1))
 	#rint("intersection:	" + str(intersection))
 	#print("intersection1:	" + str(intersection1))
-	
+
 
 	### Interpret parametrization values based on input types
 	#print("v1_v2_is_ray:	" + str(v1_v2_is_ray))

@@ -1,5 +1,8 @@
-from matplotlib import pyplot as plt
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import *
 from matplotlib.widgets import Button
+
 
 class LineBuilder:
     def __init__(self, line):
@@ -16,15 +19,16 @@ class LineBuilder:
         self.line.set_data(self.xs, self.ys)
         self.line.figure.canvas.draw()
 
-    def __finish(self, event):
-        """
-        connect the polygon back to the first point.
-        """
+    def _finish(self, event):
         self.xs.append(self.xs[0])
         self.ys.append(self.ys[0])
         self.line.set_data(self.xs, self.ys)
         self.line.figure.canvas.draw()
         self.line.figure.canvas.mpl_disconnect(self.cid)
+        """
+        connect the polygon back to the first point.
+        """
+
 
 def main():
     fig = plt.figure()
@@ -37,9 +41,17 @@ def main():
 
     line, = ax.plot([], [], marker = 'o')
     linebuilder = LineBuilder(line)
-    bdone.on_clicked(linebuilder.__finish)
+    bdone.on_clicked(linebuilder._finish)
 
     plt.show()
+    print(linebuilder.xs, "\n", linebuilder.ys)
+
+    lst = []
+    for x,y in zip(linebuilder.xs, linebuilder.ys):
+        lst.append((x, y))
+    P = Polygon(lst)
+    print(P.get_xy())
+
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,5 @@
-from shapely.geometry.polygon import Polygon
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
 
 
 class __BasicNode:
@@ -35,6 +36,9 @@ class Node(__BasicNode):
 	def getCoords(self):
 		return self.coords
 
+	def __getitem__(self, i):
+		return self.coords[i]
+
 
 
 
@@ -49,6 +53,9 @@ class Lambda(__BasicNode):
 
 	def getDirection(self):
 		return self.direction
+
+	def __getitem__(self, i):
+		return self.direction[i]
 
 
 
@@ -79,10 +86,15 @@ class StructuredPoly:
 		self.polygon = Polygon(list_of_vertices)
 		self.k_list = list()
 		self.flex_dictionary = dict()
+		self.F_list = list()
+		self.L_list = list()
+
+	def setFlex(self):
+		pass
 
 
 # Class testing
-"""
+'''
 node = Node((1, 1))
 print(node.getCoords())
 node.setCoords((2, 2))
@@ -97,11 +109,4 @@ print(lam.getDirection())
 k = K()
 
 poly = StructuredPoly([(0, 0), (1, 0), (0, 1)])
-"""
-
-
-
-
-
-
-
+'''
