@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
+from Global_Functions import *
 
 
 class __BasicNode:
@@ -85,12 +86,69 @@ class StructuredPoly:
 	def __init__(self, list_of_vertices = []):
 		self.polygon = Polygon(list_of_vertices)
 		self.k_list = list()
-		self.flex_dictionary = dict()
+		self.flex_dictionary = setFlex(list_of_vertices)
 		self.F_list = list()
 		self.L_list = list()
 
-	def setFlex(self):
-		pass
+
+	def setFlex(self, list_of_vertices):
+		'''
+		Note: This will only work if the list is organized such that the first point is not repeated and 
+		the list is circular!
+		'''
+
+		oriented = orientVert(list_of_vertices)
+
+		flexes = dict()
+
+		i = 0
+		j = 0
+		k = 0
+		
+		while len(flexes) < len(list_of_vertices):
+			if CCW(oriented[i], oriented[j], oriented[k]) == -1:
+				#mark point j as reflex
+				flexes[oriented[j]] = 0
+			else:
+				#mark point j as nonreflex
+				flexes[oriented[j]] = 1
+			i += 1
+			j += 1
+			k += 1
+
+		return flexes
+
+	def orientVert(self, list_of_vertices):
+		oriented = []
+		'''
+		pick leftmost point or lowest point
+		'''
+		v0_index = list_of_vertices.index(sorted(list_of_vertices, key=lambda k: [k[1], k[0]])[0])
+		oriented.append(list_of_vertices[v0_index])
+
+		'''
+		compare slopes
+		'''
+		dir1 = slope(list_of_vertices[v0_index], list_of_vertices[v0_index + 1])
+		dir2 = slope(list_of_vertices[v0_index - 1], list_of_vertices[v0_index])
+
+		if dir1 < dir2:
+
+			vi_index = v0_index + 1
+			
+			while vi_index != v0_index:
+				oriented.append(list_of_vertices[vi_index])
+				vi_index += 1
+
+		elif dir2 < dir1:
+
+			vi_index = v0_index - 1
+			
+			while vi_index != v0_index:
+				oriented.append(list_of_vertices[vi_index])
+				vi_index -= 1
+
+		return oriented
 
 
 # Class testing
