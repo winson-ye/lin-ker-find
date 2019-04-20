@@ -72,13 +72,13 @@ def _reflex(i, P, K, F, L):
             x = x.next
         if x == L[i]:
             return -1
-        wprime = findIntersection(lamb, v, x, x.next)
+        wprime = Node(findIntersection(lamb, v, x, x.next))
 
         while y != K[i].getHead() and findIntersection(lamb, v, y, y.prev) == None:
             y = y.prev
         wdprime = None
         if y != K[i].getHead():
-            wdprime = findIntersection(lamb, v, y, y.prev)
+            wdprime = Node(findIntersection(lamb, v, y, y.prev))
 
 # Currently using the same instance for K[i+1] and K[i]
         K.append(K[i])
@@ -100,10 +100,25 @@ def _reflex(i, P, K, F, L):
             wprime.next = x
             K[i+1].head = lamb
 
-# THIS STILL NEEDS TO BE DONE (7-a-i-7 on Google Doc)
         else:
-            return 1
+            z = tail
+            while findIntersection(z.prev, z, P[i], P[i+1]) == None:
+                z = z.prev
+            wdprime = Node(findIntersection(z.prev, z, P[i], P[i+1]))
+            z = z.prev
+            K[i+1].head = wprime
+            K[i+1].tail = wdprime
+            x.prev = wprime
+            wprime.next = x
+            z.next = wdprime
+            wdprime.prev = z
+            wprime.prev = wdprime
+            wdprime.next = wprime
 
+        if wdprime != None:
+            F.append(wdprime)
+        else:
+            F.append(lamb)
 
 # F is strictly on left
     else:
