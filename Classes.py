@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
-from Global_Functions import *
 
 
 class __BasicNode:
@@ -86,39 +85,68 @@ class StructuredPoly:
 	def __init__(self, list_of_vertices = []):
 		self.polygon = Polygon(list_of_vertices)
 		self.k_list = list()
-		self.flex_dictionary = setFlex(list_of_vertices)
+		self.flex_dictionary = self.setFlex(list_of_vertices)
 		self.F_list = list()
 		self.L_list = list()
 
 
 	def setFlex(self, list_of_vertices):
+
 		'''
-		Note: This will only work if the list is organized such that the first point is not repeated and 
-		the list is circular!
+		Get an oriented list of vertices that will show me which way to walk around the polygon
+		using orientVert
 		'''
 
-		oriented = orientVert(list_of_vertices)
-
+		oriented = self.orientVert(list_of_vertices)
 		flexes = dict()
 
-		i = 0
-		j = 0
-		k = 0
+		last = len(oriented) - 1
 		
-		while len(flexes) < len(list_of_vertices):
-			if CCW(oriented[i], oriented[j], oriented[k]) == -1:
+		'''
+		I want to go around oriented until I find start reflex vertex
+		'''
+		while i != 0:
+			i = 0
+			j = 0
+			k = 0
+
+			if gbl.ccw(oriented[i], oriented[j], oriented[k]) == -1:
+				#found starting reflex vertex
+				reflex_index = j
+				break
+				
+			i = (i + 1) % last
+			j = (j + 2) % last
+			k = (k + 3) % last
+
+		'''
+		Now start labeling the vertices starting from reflex_index
+		'''
+
+		i = reflex_index
+		j = (reflex_index + 1) % last
+		k = (reflex_index + 2) % last
+
+		while len(flexes) < len(oriented):
+
+			if gbl.ccw(oriented[i], oriented[j], oriented[k] == -1):
 				#mark point j as reflex
-				flexes[oriented[j]] = 0
+				flexes[oriented[j]] = -1
 			else:
-				#mark point j as nonreflex
+				#mark point j as convex
 				flexes[oriented[j]] = 1
-			i += 1
-			j += 1
-			k += 1
+
+			i = (i + 1) % last
+			j = (j + 2) % last
+			k = (k + 3) % last
 
 		return flexes
 
 	def orientVert(self, list_of_vertices):
+		'''
+		This is essentially Keegan's proposed algorithm.
+		'''
+
 		oriented = []
 		'''
 		pick leftmost point or lowest point
@@ -126,32 +154,36 @@ class StructuredPoly:
 		v0_index = list_of_vertices.index(sorted(list_of_vertices, key=lambda k: [k[1], k[0]])[0])
 		oriented.append(list_of_vertices[v0_index])
 
+		last = len(list_of_vertices) - 1
+
 		'''
 		compare slopes
 		'''
-		dir1 = slope(list_of_vertices[v0_index], list_of_vertices[v0_index + 1])
-		dir2 = slope(list_of_vertices[v0_index - 1], list_of_vertices[v0_index])
+		dir1 = gbl.slope(Node(list_of_vertices[v0_index % last]), Node(list_of_vertices[(v0_index + 1) % last]))
+		dir2 = gbl.slope(list_of_vertices[(v0_index - 1) % last], list_of_vertices[v0_index])
+
+		'''walk in the direction of lowest slope'''
 
 		if dir1 < dir2:
 
-			vi_index = v0_index + 1
+			vi_index = (v0_index + 1) % last
 			
 			while vi_index != v0_index:
 				oriented.append(list_of_vertices[vi_index])
-				vi_index += 1
+				vi_index = (vi_index + 1) % last
 
 		elif dir2 < dir1:
 
-			vi_index = v0_index - 1
+			vi_index = (v0_index - 1) % last
 			
 			while vi_index != v0_index:
 				oriented.append(list_of_vertices[vi_index])
-				vi_index -= 1
+				vi_index = (vi_index - 1) % last
 
 		return oriented
 
 
-# Class testing
+#Class testing
 '''
 node = Node((1, 1))
 print(node.getCoords())
@@ -165,6 +197,5 @@ print(lam.getDirection())
 
 
 k = K()
-
 poly = StructuredPoly([(0, 0), (1, 0), (0, 1)])
 '''
