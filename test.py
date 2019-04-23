@@ -44,6 +44,9 @@ def main():
     bdone.on_clicked(linebuilder._finish)
 
     plt.show()
+
+    '''
+    testing code for point representations
     print(linebuilder.xs, "\n", linebuilder.ys)
 
     lst = []
@@ -51,6 +54,17 @@ def main():
         lst.append((x, y))
     P = Polygon(lst)
     print(P.get_xy())
+    '''
+
+    '''
+    testing code for filling regions
+    x = [0, 1, 2, 1]
+    y = [1, 2, 1, 0]
+
+    ax.fill(x, y, alpha=0.5)
+    ax.set_ylim([0, 0.5])
+    ax.set_xlim([0, 0.5])
+    '''
 
 
 if __name__ == '__main__':
