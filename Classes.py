@@ -40,6 +40,9 @@ class Node(__BasicNode):
 	def __getitem__(self, i):
 		return self.coords[i]
 
+	def __eq__(self, other):
+		return self is other
+
 
 
 class Lambda(__BasicNode):
@@ -56,6 +59,9 @@ class Lambda(__BasicNode):
 
 	def __getitem__(self, i):
 		return self.direction[i]
+
+	def __eq__(self, other):
+		return self is other
 
 
 
@@ -101,7 +107,7 @@ class StructuredPoly:
 		flexes = dict()
 
 		last = len(oriented) - 1
-		
+
 		'''
 		I want to go around oriented until I find start reflex vertex
 		'''
@@ -114,7 +120,7 @@ class StructuredPoly:
 				#found starting reflex vertex
 				reflex_index = j
 				break
-				
+
 			i = (i + 1) % last
 			j = (j + 2) % last
 			k = (k + 3) % last
@@ -167,7 +173,7 @@ class StructuredPoly:
 		if dir1 < dir2:
 
 			vi_index = (v0_index + 1) % last
-			
+
 			while vi_index != v0_index:
 				oriented.append(list_of_vertices[vi_index])
 				vi_index = (vi_index + 1) % last
@@ -175,7 +181,7 @@ class StructuredPoly:
 		elif dir2 < dir1:
 
 			vi_index = (v0_index - 1) % last
-			
+
 			while vi_index != v0_index:
 				oriented.append(list_of_vertices[vi_index])
 				vi_index = (vi_index - 1) % last

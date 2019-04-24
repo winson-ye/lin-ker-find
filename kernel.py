@@ -124,13 +124,13 @@ def _reflex(i, P, K, F, L):
     else:
         K.append(K[i])
         F.append(F[i])
-        while(ccw(F[i+1].prev, F[i+1], F[i+1].next) == 1):
-            F[i+1] = F[i].next
+        while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
+            F[i+1] = F[i+1].next
 
 # Compute next L node in K
     L.append(L[i])
     X = L[i].next
-    while(ccw(X.prev, X, X.next) == -1 and X != L[i]):
+    while(ccw(P[i+1], X, X.next) == -1 and X != L[i]):
         X = X.next
     if X != L[i]:
         L[i+1] = X
@@ -185,24 +185,51 @@ def _convex(i, P, K, F, L):
         else:
         # Flip else case from reflex (on line 103 to 116)
         #2.1.1
-            pass
+            z = head
+            while findIntersection(z.next, z, P[i], P[i+1]) == None:
+                z = z.next
+            wdprime = Node(findIntersection(z.next, z, P[i], P[i+1]))
+            z = z.next
+            K[i+1].tail = wprime
+            K[i+1].head = wdprime
+            x.next = wprime
+            wprime.prev = x
+            z.prev = wdprime
+            wdprime.next = z
+            wprime.next = wdprime
+            wdprime.prev = wprime
 
         if not wdprime == None:
             region = findRegion(wprime, wdprime, Node(P[i+1]))
             if region == -1:
                 # Follow reflex for F[i+1]
+                F.append(F[i])
+                while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
+                    F[i+1] = F[i+1].next
                 L.append(wdprime)
+
             elif region == 0:
                 F.append(wprime)
                 L.append(wdprime)
+
             elif region == 1:
                 F.append(wprime)
                 # Follow reflex for L[i+1] except scan ccw from wdprime
+                L.append(wdprime)
+                X = wdprime.next
+                while(ccw(P[i+1], X, X.next) == -1 and X != wdprime):
+                    X = X.next
+                if X != L[i]:
+                    L[i+1] = X
+
         else:
             region = findRegion(v, wprime, Node(P[i+1]))
             if region == 0:
                 # Follow reflex for F[i+1]
-                pass
+                F.append(F[i])
+                while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
+                    F[i+1] = F[i+1].next
+
             elif region == 1:
                 F.append(wprime)
             L.append(lamb)
@@ -210,9 +237,20 @@ def _convex(i, P, K, F, L):
     else:
         K.append(K[i])
         # Follow reflex for F[i+1]
+        F.append(F[i])
+        while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
+            F[i+1] = F[i+1].next
+
         if type(K[i+1].head) == Lambda:
             L.append(L[i])
+
         else:
             # Follow reflex for L[i+1]
+            L.append(L[i])
+            X = L[i].next
+            while(ccw(P[i+1], X, X.next) == -1 and X != L[i]):
+                X = X.next
+            if X != L[i]:
+                L[i+1] = X
 
     return 1
