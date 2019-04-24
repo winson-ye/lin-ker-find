@@ -164,13 +164,59 @@ def findIntersection(v1, v2, u1, u2):
 def slope(v1, v2):
 	if (type(v1) == Lambda) and (type(v2) == Lambda):
 		print("DOUBLE LAMBDAS. DO SOMETHING ABOUT IT")
+
 	elif (type(v1) == Lambda):
-		return v1.direction
+		if v1.direction[0] == 0:
+			print("slope:	Divide by 0")
+			return None
+		else:
+			return v1.direction[1] / v1.direction[0]
+
 	elif (type(v2) == Lambda):
-		return v2.direction
+		if v2.direction[0] == 0:
+			print("slope:	Divide by 0")
+			return None
+		else:
+			return v2.direction[1] / v2.direction[0]
+
 	else:
 		den = (v2[0] - v1[0])
 		return (v2[1] - v1[1]) / den
+
+	return None
+
+
+
+
+def findRegion(wprime, wdprime, v_iplus1):
+	# Set t = 0 at wprime
+	# Set t = 1 at wdprime
+	# Find t for v_iplus1
+	# return:
+	#	-1 , t < 0
+	#	0  , 0 <= t <= 1
+	#	1  , t > 1
+	
+
+	diff_1 = (v_iplus1.coords[0] - wprime.coords[0], v_iplus1.coords[1] - wprime.coords[1])
+	diff_2 = (wdprime.coords[0] - wprime.coords[0], wdprime.coords[1] - wprime.coords[1])
+
+	dot_product = diff_1[0] * diff_2[0] + diff_1[1] * diff_2[1]
+
+	if dot_product < 0:
+		return -1
+
+	else:
+		square_l2_norm_ratio = ((diff_1[0] ** 2) + (diff_1[1] ** 2)) / ((diff_2[0] ** 2) + (diff_2[1] ** 2))
+
+		if 0 <= square_l2_norm_ratio <= 1:
+			return 0
+
+		elif square_l2_norm_ratio > 1:
+			return 1
+
+		else:
+			print("findRegion:	square_l2_norm_ratio is negative when that's impossible")
 
 
 
