@@ -164,14 +164,26 @@ def findIntersection(v1, v2, u1, u2):
 def slope(v1, v2):
 	if (type(v1) == Lambda) and (type(v2) == Lambda):
 		print("DOUBLE LAMBDAS. DO SOMETHING ABOUT IT")
+
 	elif (type(v1) == Lambda):
-		return v1.direction
+		if v1.direction[0] == 0:
+			print("slope:	Divide by 0")
+			return None
+		else:
+			return v1.direction[1] / v1.direction[0]
+
 	elif (type(v2) == Lambda):
-		return v2.direction
+		if v2.direction[0] == 0:
+			print("slope:	Divide by 0")
+			return None
+		else:
+			return v2.direction[1] / v2.direction[0]
+
 	else:
 		den = (v2[0] - v1[0])
 		return (v2[1] - v1[1]) / den
 
+	return None
 
 
 
