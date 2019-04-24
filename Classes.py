@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
 
+
 class __BasicNode:
 	def __init__(self):
 		self.next = None
