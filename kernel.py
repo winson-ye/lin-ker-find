@@ -37,11 +37,25 @@ def getKernel(P):
     angle = P.flex_dictionary
 
 # Check if there exists a reflex angle
-    count = 0
-    for k,v in angle:
-        if v != 1:
-            count += 1
-    if count == 0:
+    list_of_vertices = poly.get_xy()
+    if angle[list_of_vertices[0]] == -1:
+    # If so, make a K_0
+        initial_node = Node(first_point)
+        tail_lambda = Lambda((list_of_vertices[0][0] - list_of_vertices[1][0], list_of_vertices[0][1] - list_of_vertices[1][1]))
+        head_lambda = Lambda((list_of_vertices[0][0] - list_of_vertices[-2][0], list_of_vertices[0][1] - list_of_vertices[-2][1]))
+
+        head_lambda.next = initial_node
+        head_lambda.prev = None
+
+        initial_node.next = tail_lambda
+        initial_node.prev = head_lambda
+
+        tail_lambda.next = None
+        tail_lambda.prev = initial_node
+
+        ker.append(K(head_lambda, tail_lambda))
+
+    else:
         return poly
 
 # Iterate over vertices, handle reflex and convex angles
@@ -143,3 +157,15 @@ Convex angle helper function for getKernel
 '''
 def _convex(i, P, K, F, L):
     pass
+
+
+
+def JeffsAlgorithm(K):
+    # Construct the Polygon 
+    if (type(K.head) == Lambda) && (type(K.tail) == Lambda):
+        return
+    elif !(type(K.head) == Lambda) && !(type(K.tail) == Lambda):
+        return
+    else:
+        print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
+        return None
