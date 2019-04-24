@@ -51,7 +51,10 @@ def getKernel(P):
             if result == -1:
                 return Polygon([])
         elif angle[P[i]] == 1:
-            _convex(i, poly, ker, F, L)
+            result = _convex(i, poly, ker, F, L)
+            if result == -1:
+                return Polyton([])
+    return K[len(poly) - 1]
 
 
 '''
