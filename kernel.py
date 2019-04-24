@@ -142,4 +142,77 @@ def _reflex(i, P, K, F, L):
 Convex angle helper function for getKernel
 '''
 def _convex(i, P, K, F, L):
-    pass
+    e = (P[i+1][0] - P[i][0], P[i+1][1] - P[i][1])
+    lamb = Lambda(e)
+    v = Node(P[i])
+    lamb.prev = v
+    v.next = lamb
+
+    if not (ccw(v, Node(P[i+1]), L[i]) == 1):
+        x = L[i]
+        y = L[i]
+        while (not x == F[i]) and (findIntersection(lamb, v, x, x.prev) == None):
+            x = x.prev
+        if x == F[i]:
+            return {}
+
+        wprime = Node(findIntersection(lamb, v, x, x.prev))
+        while (not y == K[i].getTail()) and (findIntersection(lamb, v, y, y.next) == None):
+            y = y.next
+
+        wdprime = None
+        if (not y == K[i].getTail()):
+            wdprime = Node(findIntersection(lamb, v, y, y.next))
+        K.append(K[i])
+        x, y = x.prev, y.next
+        head, tail = K[i+1].head, K[i+1].tail
+
+        if not (wdprime == None):
+            wprime.next = wdprime
+            wdprime.prev = wprime
+            x.next = wprime
+            wprime.prev = x
+            y.prev = wdprime
+            wdprime.next = y
+
+        elif slope(tail.prev, tail) >= slope(P[i], P[i+1]) >= slope(head, head.next) or slope(head, head.next) >= slope(P[i], P[i+1]) >= slope(tail.prev, tail):
+            x.next = wprime
+            wprime.prev = x
+            wprime.next = lamb
+            lamb.prev = wprime
+            K[i+1].tail = lamb
+
+        else:
+        # Flip else case from reflex (on line 103 to 116)
+        #2.1.1
+            pass
+
+        if not wdprime == None:
+            region = findRegion(wprime, wdprime, Node(P[i+1]))
+            if region == -1:
+                # Follow reflex for F[i+1]
+                L.append(wdprime)
+            elif region == 0:
+                F.append(wprime)
+                L.append(wdprime)
+            elif region == 1:
+                F.append(wprime)
+                # Follow reflex for L[i+1] except scan ccw from wdprime
+        else:
+            region = findRegion(v, wprime, Node(P[i+1]))
+            if region == 0:
+                # Follow reflex for F[i+1]
+                pass
+            elif region == 1:
+                F.append(wprime)
+            L.append(lamb)
+
+    else:
+        K.append(K[i])
+        # Follow reflex for F[i+1]
+        if type(K[i+1].head) == Lambda:
+            L.append(L[i])
+        else:
+            # Follow reflex for L[i+1]
+
+    return 1
