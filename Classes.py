@@ -42,7 +42,6 @@ class Node(__BasicNode):
 
 
 
-
 class Lambda(__BasicNode):
 	def __init__(self, direction = None):
 		super().__init__()
