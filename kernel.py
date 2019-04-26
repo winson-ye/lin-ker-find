@@ -280,7 +280,7 @@ def JeffsAlgorithm(K):
     # Construct the Polygon 
     vertices_array = []
 
-    if (type(K.head) == Lambda) && (type(K.tail) == Lambda):
+    if (type(K.head) == Lambda) and (type(K.tail) == Lambda):
         cur_node = K.head.next
 
         bounding_box_corners = [Node((0, 0)), Node((100, 0)), Node((100, 100)), Node((0, 100))]
@@ -333,7 +333,7 @@ def JeffsAlgorithm(K):
 
         return Polygon(vertices_array)
     
-    elif not (type(K.head) == Lambda) && not (type(K.tail) == Lambda):
+    elif not (type(K.head) == Lambda) and not (type(K.tail) == Lambda):
         # K is a cyclic doubly linked list, so read each node into a Polygon object
         cur_node = K.head
         
