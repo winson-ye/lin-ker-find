@@ -74,13 +74,14 @@ def main():
     '''
     testing code for point representations
     print(linebuilder.xs, "\n", linebuilder.ys)
+    '''
 
     lst = []
     for x,y in zip(linebuilder.xs, linebuilder.ys):
         lst.append((x, y))
     P = Polygon(lst)
     print(P.get_xy())
-    '''
+
 
     '''
     testing code for filling regions
