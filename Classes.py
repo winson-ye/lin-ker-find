@@ -90,53 +90,53 @@ class K:
 
 class StructuredPoly:
 	def __init__(self, list_of_vertices = []):
-		self.polygon = Polygon(list_of_vertices)
+		self._pts = self.orientVert(list_of_vertices)
 		self.k_list = list()
-		self.flex_dictionary = self.setFlex(list_of_vertices)
+		self.flex_dictionary = self.setFlex()
+		self.polygon = Polygon(self._pts)
 		self.F_list = list()
 		self.L_list = list()
 
 
-	def setFlex(self, list_of_vertices):
+	def setFlex(self):
 
 		'''
 		Get an oriented list of vertices that will show me which way to walk around the polygon
 		using orientVert
 		'''
 
-		oriented = self.orientVert(list_of_vertices)
+		oriented = self._pts
 		flexes = dict()
 
-		last = len(oriented) - 1
+		last = len(oriented)
 
 		'''
 		I want to go around oriented until I find start reflex vertex
 		'''
-		while i != 0:
-			i = 0
-			j = 0
-			k = 0
+		i = -1
+		j = 0
+		k = 1
+		while not i == last:
 
-			if gbl.ccw(oriented[i], oriented[j], oriented[k]) == -1:
+			reflex_index = j
+			if ccw(oriented[i % last], oriented[j % last], oriented[k % last]) == -1:
 				#found starting reflex vertex
-				reflex_index = j
 				break
 
-			i = (i + 1) % last
-			j = (j + 2) % last
-			k = (k + 3) % last
+			i += 1
+			j += 1
+			k += 1
 
 		'''
 		Now start labeling the vertices starting from reflex_index
 		'''
 
-		i = reflex_index
+		i = reflex_index % last
 		j = (reflex_index + 1) % last
 		k = (reflex_index + 2) % last
 
 		while len(flexes) < len(oriented):
-
-			if gbl.ccw(oriented[i], oriented[j], oriented[k] == -1):
+			if ccw(oriented[i], oriented[j], oriented[k]) == -1:
 				#mark point j as reflex
 				flexes[oriented[j]] = -1
 			else:
@@ -144,10 +144,30 @@ class StructuredPoly:
 				flexes[oriented[j]] = 1
 
 			i = (i + 1) % last
-			j = (j + 2) % last
-			k = (k + 3) % last
+			j = (j + 1) % last
+			k = (k + 1) % last
+
+		lst, added = [], dict()
+		for v in range(len(self._pts)):
+			if lst == []:
+				if  flexes[oriented[v]] == -1:
+					lst.append(oriented[v])
+					added.update({oriented[v]: 1})
+				else:
+					added.update({oriented[v]: 0})
+			else:
+				lst.append(oriented[v])
+				added.update({oriented[v]: 1})
+
+		for v in range(len(self._pts)):
+			if added[oriented[v]] == 0:
+				lst.append(oriented[v])
+				added[oriented[v]] = 1
+
+		self._pts = lst
 
 		return flexes
+
 
 	def orientVert(self, list_of_vertices):
 		'''
@@ -166,8 +186,8 @@ class StructuredPoly:
 		'''
 		compare slopes
 		'''
-		dir1 = gbl.slope(Node(list_of_vertices[v0_index % last]), Node(list_of_vertices[(v0_index + 1) % last]))
-		dir2 = gbl.slope(list_of_vertices[(v0_index - 1) % last], list_of_vertices[v0_index])
+		dir1 = slope(Node(list_of_vertices[v0_index % last]), Node(list_of_vertices[(v0_index + 1) % last]))
+		dir2 = slope(Node(list_of_vertices[v0_index % last]), Node(list_of_vertices[(v0_index - 1) % last]))
 
 		'''walk in the direction of lowest slope'''
 
@@ -188,6 +208,7 @@ class StructuredPoly:
 				vi_index = (vi_index - 1) % last
 
 		return oriented
+
 
 def det2x2(a, b, c, d):
 	#	[a, b;
@@ -362,6 +383,9 @@ def slope(v1, v2):
 
 	else:
 		den = (v2[0] - v1[0])
+		if den == 0:
+			print("slope:   Divide by 0")
+			return None
 		return (v2[1] - v1[1]) / den
 
 	return None

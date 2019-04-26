@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from Classes import *
 from Global_Functions import *
-from test.py import *
+from test import *
 
 
 '''
@@ -19,6 +19,8 @@ def getInputPoly():
     line, = ax.plot([], [], marker = 'o')
     linebuilder = LineBuilder(line)
     bdone.on_clicked(linebuilder._finish)
+
+    plt.show()
 
     lst = []
     for x,y in zip(linebuilder.xs, linebuilder.ys):
@@ -62,12 +64,12 @@ def getKernel(P):
     for i in range(len(poly) - 1):
         if angle[P[i]] == -1:
             result = _reflex(i, poly, ker, F, L)
-            if result == -1:
-                return Polygon([])
         elif angle[P[i]] == 1:
             result = _convex(i, poly, ker, F, L)
-            if result == -1:
-                return Polygon([])
+
+        if result == -1:
+            return Polygon([])
+
     return K[len(poly) - 1]
 
 
@@ -276,12 +278,24 @@ def _convex(i, P, K, F, L):
 
 
 def JeffsAlgorithm(K):
-    # Construct the Polygon 
-    if (type(K.head) == Lambda) && (type(K.tail) == Lambda):
+    # Construct the Polygon
+    if (type(K.head) == Lambda) and (type(K.tail) == Lambda):
         return
-    elif !(type(K.head) == Lambda) && !(type(K.tail) == Lambda):
+    elif not (type(K.head) == Lambda) and not (type(K.tail) == Lambda):
         return
     else:
         print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
         return None
 
+
+
+def main():
+    P = getInputPoly()
+    print(P.polygon.get_xy())
+    print(P.flex_dictionary)
+
+    
+
+
+if __name__ == '__main__':
+    main()
