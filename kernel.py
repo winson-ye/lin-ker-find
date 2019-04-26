@@ -12,6 +12,8 @@ def getInputPoly():
     ax = fig.add_subplot(111)
     ax.set_title('click done to create your polygon')
     plt.subplots_adjust(bottom=0.2)
+    ax.set_xlim([0, 100])
+    ax.set_ylim([0, 100])
 
     axdone = plt.axes([0.81, 0.05, 0.1, 0.075])
     bdone = Button(axdone, 'Done')
@@ -272,9 +274,6 @@ def _convex(i, P, K, F, L):
 
     return 1
 
-
-
-
 def JeffsAlgorithm(K):
     # Construct the Polygon 
     if (type(K.head) == Lambda) && (type(K.tail) == Lambda):
@@ -284,4 +283,19 @@ def JeffsAlgorithm(K):
     else:
         print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
         return None
+
+def plotPoint(ax, x, y, label):
+    ax.plot(x, y, marker='o')
+    ax.annotate(label, xy=(x, y), xytext=(x + 10, y + 10), arrowprops=dict(facecolor='black'))
+
+def plotKi(ax, verts, label):
+    p = Polygon(verts)
+    p.set_alpha(0.4)
+    p.set_color('r')
+    plt.pause(5)
+    ax.add_patch(p)
+    ax.set_title("drawing " + label)
+
+
+
 

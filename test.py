@@ -43,6 +43,32 @@ def main():
     linebuilder = LineBuilder(line)
     bdone.on_clicked(linebuilder._finish)
 
+    x = [20, 40, 20, 20]
+    y = [20, 40, 40, 20]
+
+    #ax.fill(x, y, alpha=0.5)
+    ax.set_ylim([0, 100])
+    ax.set_xlim([0, 100])
+
+    #ax.plot(x, y, marker = 'o')
+
+    #for xs in x:
+    #    for ys in y:
+    #        ax.annotate('hi', xy=(xs, ys), xytext=(xs + 10, ys + 10), arrowprops=dict(facecolor='black'))
+
+    #p = Polygon([(20, 20), (40, 40), (20, 40), (20, 20)])
+    #p.set_label('triangle')
+    #p.set_alpha(0.2)
+    #p.set_color('r')
+    #ax.annotate('hi', horizontalalignment='center')
+    #plt.pause(5)
+    #ax.add_patch(p)
+
+    #ax.annotate('hi', xy=(20, 20), xytext=(30, 30), arrowprops=dict(facecolor='black'))
+
+    #ax.set_title('hi')
+
+
     plt.show()
 
     '''
