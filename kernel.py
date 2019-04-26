@@ -277,11 +277,75 @@ def _convex(i, P, K, F, L):
     return 1
 
 def JeffsAlgorithm(K):
-    # Construct the Polygon
-    if (type(K.head) == Lambda) and (type(K.tail) == Lambda):
-        return
-    elif not (type(K.head) == Lambda) and not (type(K.tail) == Lambda):
-        return
+    # Construct the Polygon 
+    vertices_array = []
+
+    if (type(K.head) == Lambda) && (type(K.tail) == Lambda):
+        cur_node = K.head.next
+
+        bounding_box_corners = [Node((0, 0)), Node((100, 0)), Node((100, 100)), Node((0, 100))]
+
+        # Append coords of all non-lambda nodes to vertices_array
+        while cur_node != K.tail:
+            vertices_array.append(cur_node.coords)
+            cur_node = cur_node.next
+
+
+        # Find where the head and tail lambdas intersect the bounding box
+        head_box_intersection = None
+        tail_box_intersection = None
+
+        for i in range(4):
+            if head_box_intersection == None:
+                head_box_intersection = findIntersection(bounding_box_corners[i % len(bounding_box_corners)], bounding_box_corners[(i + 1) % len(bounding_box_corners)], K.head.next, K.head)
+            
+            if tail_box_intersection == None:
+                tail_box_intersection = findIntersection(bounding_box_corners[i % len(bounding_box_corners)], bounding_box_corners[(i + 1) % len(bounding_box_corners)], K.tail.prev, K.tail)
+
+            if head_box_intersection != None and tail_box_intersection != None:
+                break
+
+        # Append where the tail intersects the bounding box
+        vertices_array.append(tail_box_intersection)
+
+
+        # Find which side of the bounding box that the tail lambda intersects
+        corner_index = 0
+        if tail_box_intersection[0] == 0:
+            corner_index = 0
+
+        elif tail_box_intersection[1] == 0:
+            corner_index = 1
+
+        elif tail_box_intersection[0] == 100:
+            corner_index = 2
+
+        elif tail_box_intersection[1] == 100:
+            corner_index = 3
+
+
+        while ccw(Node(head_box_intersection), Node(tail_box_intersection), bounding_box_corners[corner_index % len(bounding_box_corners)]) == 1:
+            vertices_array.append(bounding_box_corners[corner_index % len(bounding_box_corners)].coords)
+            corner_index += 1
+
+        vertices_array.append(head_box_intersection)
+        vertices_array.append(K.head.next.coords)
+
+        return Polygon(vertices_array)
+    
+    elif not (type(K.head) == Lambda) && not (type(K.tail) == Lambda):
+        # K is a cyclic doubly linked list, so read each node into a Polygon object
+        cur_node = K.head
+        
+        while cur_node != K.tail:
+            vertices_array.append(cur_node.coords)
+            cur_node = cur_node.next
+        
+        vertices_array.append(K.tail.coords)
+        vertices_array.append(K.head.coords)
+
+        return Polygon(vertices_array)
+
     else:
         print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
         return None
