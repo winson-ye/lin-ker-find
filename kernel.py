@@ -42,9 +42,9 @@ def getKernel(P):
 
 # Check if there exists a reflex angle
     list_of_vertices = poly.get_xy()
-    if angle[list_of_vertices[0]] == -1:
+    if angle[tuple(list_of_vertices[0])] == -1:
     # If so, make a K_0
-        initial_node = Node(first_point)
+        initial_node = Node(list_of_vertices[0])
         tail_lambda = Lambda((list_of_vertices[0][0] - list_of_vertices[1][0], list_of_vertices[0][1] - list_of_vertices[1][1]))
         head_lambda = Lambda((list_of_vertices[0][0] - list_of_vertices[-2][0], list_of_vertices[0][1] - list_of_vertices[-2][1]))
 
@@ -364,8 +364,11 @@ def plotKi(ax, verts, label):
 
 def main():
     P = getInputPoly()
-    print(P.polygon.get_xy())
     print(P.flex_dictionary)
+    q = getKernel(P)
+    print(q.get_xy())
+    #print(P.polygon.get_xy())
+    #print(P.flex_dictionary)
 
 if __name__ == '__main__':
     main()

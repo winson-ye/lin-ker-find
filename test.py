@@ -56,13 +56,13 @@ def main():
     #    for ys in y:
     #        ax.annotate('hi', xy=(xs, ys), xytext=(xs + 10, ys + 10))
 
-    #p = Polygon([(20, 20), (40, 40), (20, 40), (20, 20)])
+    p = Polygon([(20, 20), (40, 40), (20, 40), (20, 20)])
     #p.set_label('triangle')
-    #p.set_alpha(0.2)
-    #p.set_color('r')
+    p.set_alpha(0.2)
+    p.set_color('r')
     #ax.annotate('hi', horizontalalignment='center')
     #plt.pause(5)
-    #ax.add_patch(p)
+    ax.add_patch(p)
 
     #ax.annotate('hi', xy=(20, 20), xytext=(30, 30), arrowprops=dict(facecolor='black'))
 
