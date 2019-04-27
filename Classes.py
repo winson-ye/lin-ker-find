@@ -227,15 +227,55 @@ def det3x3(a, b, c, d, e, f, g, h, i):
 
 
 def ccw(a, b, c):
-	# It is assumed that inputs a, b, and c are lists/tuples of numbers of size 2
-	determinant = det2x2(a[0] - c[0], b[0] - c[0], a[1] - b[1], b[1] - c[1])
+	determinant = 0
 
-	if determinant == 0:
-		return 0
-	elif determinant > 0:
-		return 1
+	if type(a) == Lambda or type(b) == Lambda or type(c) == Lambda:
+		# Cycle the input order so that the Lambda is the last input argument of the ccw() function
+		if type(a) == Lambda:
+			return ccw(b, c, a)
+		
+		elif type(b) == Lambda:
+			return ccw(c, a, b)
+
+		else:
+			# Check if the direction of Lambda is the same as the direction from point a to point b
+			if c[0] * (b[1] - a[1]) == c[1] * (b[0] - a[0]):
+				if type(c.next) == Node:
+					return ccw(a, b, c.next)
+
+				elif type(c.prev) == Node:
+					return ccw(a, b, c.prev)
+
+			else:
+				# In this case, Lambda and the vector from a to b are not the same 
+				if type(c.next) == Node:
+					# Lambda is the head of the linked list
+					determinant = c[0] * b[1] - c[1] * b[0] + c[1] * a[0] - c[0] * a[1] 
+
+				elif type(c.prev) == Node:
+					# Lambda is the tail of the linked list
+					determinant = c[1] * b[0] - c[0] * b[1] + c[0] * a[1] - c[1] * a[0]
+
+
+				if determinant < 0:
+					return -1
+
+				elif determinant > 0:
+					return 1
+
+				else:
+					return 0
+
+
 	else:
-		return -1
+		determinant = det2x2(a[0] - c[0], b[0] - c[0], a[1] - b[1], b[1] - c[1])
+
+		if determinant == 0:
+			return 0
+		elif determinant > 0:
+			return 1
+		else:
+			return -1
 
 
 
