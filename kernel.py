@@ -352,7 +352,7 @@ def JeffsAlgorithm(K):
 
 def plotPoint(ax, x, y, label):
     ax.plot(x, y, marker='o')
-    ax.annotate(label, xy=(x, y), xytext=(x + 10, y + 10), arrowprops=dict(facecolor='black'))
+    ax.annotate(label, xy=(x, y), xytext=(x + 10, y + 10))
 
 def plotKi(ax, verts, label):
     p = Polygon(verts)

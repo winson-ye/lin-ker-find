@@ -54,7 +54,7 @@ def main():
 
     #for xs in x:
     #    for ys in y:
-    #        ax.annotate('hi', xy=(xs, ys), xytext=(xs + 10, ys + 10), arrowprops=dict(facecolor='black'))
+    #        ax.annotate('hi', xy=(xs, ys), xytext=(xs + 10, ys + 10))
 
     #p = Polygon([(20, 20), (40, 40), (20, 40), (20, 20)])
     #p.set_label('triangle')
@@ -74,7 +74,6 @@ def main():
     '''
     testing code for point representations
     print(linebuilder.xs, "\n", linebuilder.ys)
-    '''
 
     lst = []
     for x,y in zip(linebuilder.xs, linebuilder.ys):
@@ -82,6 +81,7 @@ def main():
     P = Polygon(lst)
     print(P.get_xy())
 
+    '''
 
     '''
     testing code for filling regions
