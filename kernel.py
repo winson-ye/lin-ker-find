@@ -39,6 +39,8 @@ def getKernel(P):
     ker = P.k_list
     poly = P.polygon
     angle = P.flex_dictionary
+    F = P.F_list
+    L = P.L_list
 
 # Check if there exists a reflex angle
     list_of_vertices = poly.get_xy()
@@ -58,15 +60,18 @@ def getKernel(P):
         tail_lambda.prev = initial_node
 
         ker.append(K(head_lambda, tail_lambda))
+        F.append(head_lambda)
+        L.append(tail_lambda)
 
     else:
         return poly
 
 # Iterate over vertices, handle reflex and convex angles
-    for i in range(len(poly) - 1):
-        if angle[P[i]] == -1:
+    poly = poly.get_xy()
+    for i in range(1, len(poly) - 1):
+        if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
-        elif angle[P[i]] == 1:
+        elif angle[tuple(poly[i])] == 1:
             result = _convex(i, poly, ker, F, L)
 
         if result == -1:
@@ -145,13 +150,13 @@ def _reflex(i, P, K, F, L):
     else:
         K.append(K[i])
         F.append(F[i])
-        while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
+        while F[i+1] != K[i+1].tail and (ccw(P[i+1], F[i+1], F[i+1].next) == 1):
             F[i+1] = F[i+1].next
 
 # Compute next L node in K
     L.append(L[i])
     X = L[i].next
-    while(ccw(P[i+1], X, X.next) == -1 and X != L[i]):
+    while X != K[i+1].tail and (ccw(P[i+1], X, X.next) == -1 and X != L[i]):
         X = X.next
     if X != L[i]:
         L[i+1] = X

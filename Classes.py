@@ -178,7 +178,7 @@ class StructuredPoly:
 		'''
 		pick leftmost point or lowest point
 		'''
-		v0_index = list_of_vertices.index(sorted(list_of_vertices, key=lambda k: [k[1], k[0]])[0])
+		v0_index = list_of_vertices.index(sorted(list_of_vertices, key=lambda k: [k[0], k[1]])[0])
 		oriented.append(list_of_vertices[v0_index])
 
 		last = len(list_of_vertices) - 1
