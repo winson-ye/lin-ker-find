@@ -105,13 +105,16 @@ def _reflex(i, P, K, F, L):
     if ccw(P[i], P[i+1], F[i]) != 1:
         x, y = F[i], F[i]
 
+        print("x:\n", x)
         while x != L[i] and findIntersection(lamb, v, x, x.next) == None:
+            print("x:\n", x)
             x = x.next
         if x == L[i]:
             return -1
         wprime = Node(findIntersection(lamb, v, x, x.next))
 
         while y != K[i].getHead() and findIntersection(lamb, v, y, y.prev) == None:
+            print("y:\n", y)
             y = y.prev
         wdprime = None
         if y != K[i].getHead():
@@ -236,7 +239,7 @@ def _convex(i, P, K, F, L):
         # Flip else case from reflex (on line 103 to 116)
         #2.1.1
             z = head
-            while findIntersection(z.next, z, P[i], P[i+1]) == None:
+            while findIntersection(z.next, z, Node(P[i]), Node(P[i+1])) == None:
                 z = z.next
             wdprime = Node(findIntersection(z.next, z, P[i], P[i+1]))
             z = z.next
@@ -414,13 +417,15 @@ def plotKi(ax, p, label):
 
 def main():
 
-    P = getInputPoly()
+    # P = getInputPoly()
 
-    #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
+    P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
+    # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
+    # P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
 
 
-    #print(P.flex_dictionary)
-    #print(P.polygon.get_xy(), "\n")
+    print(P.flex_dictionary)
+    print(P.polygon.get_xy(), "\n")
 
     '''
     L = Lambda([1, 1])
@@ -430,7 +435,7 @@ def main():
 
 
 
-    #q = getKernel(P)
+    q = getKernel(P)
     # print(q.get_xy())
 
 

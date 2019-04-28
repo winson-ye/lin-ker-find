@@ -410,8 +410,8 @@ def findIntersection(v1, v2, u1, u2):
 		return None
 
 	else:
-		print("findIntersect:	YOU REALLY GOOFED IN INPUTTING u1 AND u2")
-		return None
+		# print("findIntersect:	YOU REALLY GOOFED IN INPUTTING u1 AND u2")
+		raise ValueError('A very specific bad thing happened')
 
 
 	### Compute intersection
