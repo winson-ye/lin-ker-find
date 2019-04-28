@@ -53,8 +53,8 @@ def getKernel(P):
     if angle[tuple(list_of_vertices[0])] == -1:
     # If so, make a K_0
         initial_node = Node(list_of_vertices[0])
-        tail_lambda = Lambda((list_of_vertices[0][0] - list_of_vertices[1][0], list_of_vertices[0][1] - list_of_vertices[1][1]))
-        head_lambda = Lambda((list_of_vertices[0][0] - list_of_vertices[-2][0], list_of_vertices[0][1] - list_of_vertices[-2][1]))
+        head_lambda = Lambda((list_of_vertices[1][0] - list_of_vertices[0][0], list_of_vertices[1][1] - list_of_vertices[0][1]))
+        tail_lambda = Lambda((list_of_vertices[0][0] - list_of_vertices[-2][0], list_of_vertices[0][1] - list_of_vertices[-2][1]))
 
         head_lambda.next = initial_node
         head_lambda.prev = None
@@ -88,6 +88,7 @@ def getKernel(P):
         while (not x == None) and (not x == ker[i].tail):
             print(x)
             x = x.next
+        print(x)
         print("\n\n\n\n\n")
 
     return K[len(poly) - 1]
