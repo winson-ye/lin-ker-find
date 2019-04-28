@@ -81,7 +81,7 @@ def getKernel(P):
             result = _convex(i, poly, ker, F, L)
 
         if result == -1:
-            return Polygon([])
+            return Polygon([[-100, -100], [-100, -101], [-101, -100], [-100, -100]])
 
         print("K[" + str(i) + "]:\n")
         x = ker[i].head
