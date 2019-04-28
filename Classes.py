@@ -51,11 +51,11 @@ class Node(__BasicNode):
 		# Coords
 		coords = str(type(self.coords)) + "\n"
 
-		neighbors = "\n" + "Next:	" + str(type(self.next)) + "Prev:	" + str(type(self.prev)) + "\n"
+		neighbors = "\n" + "Next:	" + str(type(self.next)) + "\nPrev:	" + str(type(self.prev)) + "\n"
 
 		return "--------------------\n" + class_type + coords + neighbors + "--------------------\n"
 
-		
+
 
 class Lambda(__BasicNode):
 	def __init__(self, direction = None):
@@ -86,11 +86,11 @@ class Lambda(__BasicNode):
 
 		elif type(self.next) == Node and self.prev == None:
 			lambda_type += "Head Lambda"
-		
+
 		else:
 			lambda_type += "Neither Head or Tail Lambda"
 
-		lambda_type += "\n" + "Next:	" + str(type(self.next)) + "Prev:	" + str(type(self.prev)) + "\n"
+		lambda_type += "\n" + "Next:	" + str(type(self.next)) + "\nPrev:	" + str(type(self.prev)) + "\n"
 
 
 		# Direction

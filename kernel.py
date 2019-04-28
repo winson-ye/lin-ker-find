@@ -410,15 +410,21 @@ def plotKi(ax, p, label):
 
 def main():
 
-    P = getInputPoly()
+    # P = getInputPoly()
 
-    '''
+    P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10)])
+
+
     print(P.flex_dictionary)
     print(P.polygon.get_xy())
-    '''
+
+    L = Lambda([1, 1])
+    L.next = Node([1, 1])
+    print(L)
 
 
-    q = getKernel(P)
+
+    #q = getKernel(P)
     # print(q.get_xy())
 
 
