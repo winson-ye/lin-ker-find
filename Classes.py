@@ -44,7 +44,18 @@ class Node(__BasicNode):
 	def __eq__(self, other):
 		return self is other
 
+	def __str__(self):
+		# Class type
+		class_type = str(type(self)) + "\n"
 
+		# Coords
+		coords = str(type(self.coords)) + "\n"
+
+		neighbors = "\n" + "Next:	" + str(type(self.next)) + "Prev:	" + str(type(self.prev)) + "\n"
+
+		return "--------------------\n" + class_type + coords + neighbors + "--------------------\n"
+
+		
 
 class Lambda(__BasicNode):
 	def __init__(self, direction = None):
@@ -63,6 +74,30 @@ class Lambda(__BasicNode):
 
 	def __eq__(self, other):
 		return self is other
+
+	def __str__(self):
+		# Class type
+		class_type = str(type(self)) + "\n"
+
+		# Head/tail lambda
+		lambda_type = ""
+		if self.next == None and type(self.prev) == Node:
+			lambda_type += "Tail Lambda"
+
+		elif type(self.next) == Node and self.prev == None:
+			lambda_type += "Head Lambda"
+		
+		else:
+			lambda_type += "Neither Head or Tail Lambda"
+
+		lambda_type += "\n" + "Next:	" + str(type(self.next)) + "Prev:	" + str(type(self.prev)) + "\n"
+
+
+		# Direction
+		direction = str(self.direction)
+
+
+		return "--------------------\n" + class_type + lambda_type + "--------------------\n"
 
 
 
