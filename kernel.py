@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from Classes import *
-from Global_Functions import *
 
 '''
 Plot input polygon to compute getKernel
@@ -83,7 +82,7 @@ def getKernel(P):
         print(x)
         print("\n\n\n\n\n")
 
-    return K[len(poly) - 1]
+    return JeffsAlgorithm(ker[len(poly) - 1])
 
 
 
@@ -241,7 +240,7 @@ def _convex(i, P, K, F, L):
             z = head
             while findIntersection(z.next, z, Node(P[i]), Node(P[i+1])) == None:
                 z = z.next
-            wdprime = Node(findIntersection(z.next, z, P[i], P[i+1]))
+            wdprime = Node(findIntersection(z.next, z, Node(P[i]), Node(P[i+1])))
             z = z.next
             K[i+1].tail = wprime
             K[i+1].head = wdprime
@@ -419,9 +418,9 @@ def main():
 
     # P = getInputPoly()
 
-    P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
+    # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
     # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
-    # P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
+    P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
 
 
     print(P.flex_dictionary)
@@ -436,7 +435,7 @@ def main():
 
 
     q = getKernel(P)
-    # print(q.get_xy())
+    print(q.get_xy())
 
 
 
