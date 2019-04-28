@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 import math
-
+from matplotlib.widgets import Button
 
 
 class __BasicNode:
@@ -22,8 +22,6 @@ class __BasicNode:
 
 	def getPrev(self):
 		return self.prev
-
-
 
 
 class Node(__BasicNode):
@@ -120,8 +118,30 @@ class K:
 	def getTail(self):
 		return self.tail
 
+class LineBuilder:
+    def __init__(self, line):
+        self.line = line
+        self.xs = list()
+        self.ys = list()
+        self.cid = line.figure.canvas.mpl_connect('button_press_event', self)
 
+    def __call__(self, event):
+        print('click', event)
+        if event.inaxes!=self.line.axes: return
+        self.xs.append(event.xdata)
+        self.ys.append(event.ydata)
+        self.line.set_data(self.xs, self.ys)
+        self.line.figure.canvas.draw()
 
+    def _finish(self, event):
+        self.xs.append(self.xs[0])
+        self.ys.append(self.ys[0])
+        self.line.set_data(self.xs, self.ys)
+        self.line.figure.canvas.draw()
+        self.line.figure.canvas.mpl_disconnect(self.cid)
+        """
+        connect the polygon back to the first point.
+        """
 
 class StructuredPoly:
 	def __init__(self, list_of_vertices = []):
