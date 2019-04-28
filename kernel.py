@@ -412,7 +412,7 @@ def main():
 
     # P = getInputPoly()
 
-    P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10)])
+    P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
 
 
     print(P.flex_dictionary)
@@ -424,7 +424,7 @@ def main():
 
 
 
-    #q = getKernel(P)
+    # q = getKernel(P)
     # print(q.get_xy())
 
 
