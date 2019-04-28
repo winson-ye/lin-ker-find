@@ -113,9 +113,9 @@ class StructuredPoly:
 		'''
 		I want to go around oriented until I find start reflex vertex
 		'''
-		i = -1
-		j = 0
-		k = 1
+		i = 0
+		j = 1
+		k = 2
 		while not i == last:
 
 			reflex_index = j
@@ -233,7 +233,7 @@ def ccw(a, b, c):
 		# Cycle the input order so that the Lambda is the last input argument of the ccw() function
 		if type(a) == Lambda:
 			return ccw(b, c, a)
-		
+
 		elif type(b) == Lambda:
 			return ccw(c, a, b)
 
@@ -247,10 +247,10 @@ def ccw(a, b, c):
 					return ccw(a, b, c.prev)
 
 			else:
-				# In this case, Lambda and the vector from a to b are not the same 
+				# In this case, Lambda and the vector from a to b are not the same
 				if type(c.next) == Node:
 					# Lambda is the head of the linked list
-					determinant = c[0] * b[1] - c[1] * b[0] + c[1] * a[0] - c[0] * a[1] 
+					determinant = c[0] * b[1] - c[1] * b[0] + c[1] * a[0] - c[0] * a[1]
 
 				elif type(c.prev) == Node:
 					# Lambda is the tail of the linked list
@@ -409,24 +409,37 @@ def slope(v1, v2):
 
 	elif (type(v1) == Lambda):
 		if v1.direction[0] == 0:
-			print("slope:	Divide by 0")
-			return None
+			# print("slope:	Divide by 0")
+			if v1.direction[1] < 0:
+				return float("-inf")
+			elif v1.direction[1] > 0:
+				return float("inf")
+			return 0.0
 		else:
 			return v1.direction[1] / v1.direction[0]
 
 	elif (type(v2) == Lambda):
 		if v2.direction[0] == 0:
-			print("slope:	Divide by 0")
-			return None
+			# print("slope:	Divide by 0")
+			if v2.direction[1] < 0:
+				return float("-inf")
+			elif v2.direction[1] > 0:
+				return float("inf")
+			return 0.0
 		else:
 			return v2.direction[1] / v2.direction[0]
 
 	else:
 		den = (v2[0] - v1[0])
+		num = (v2[1] - v1[1])
 		if den == 0:
-			print("slope:   Divide by 0")
-			return None
-		return (v2[1] - v1[1]) / den
+			# print("slope:   Divide by 0")
+			if num < 0:
+				return float("-inf")
+			elif num > 0:
+				return float("inf")
+			return 0.0
+		return num / den
 
 	return None
 

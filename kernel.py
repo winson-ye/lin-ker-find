@@ -30,6 +30,12 @@ def getInputPoly():
     return StructuredPoly(lst)
 
 
+
+
+
+
+
+
 '''
 Compute kernel of a polygon
 Input: StructuredPoly
@@ -68,7 +74,7 @@ def getKernel(P):
 
 # Iterate over vertices, handle reflex and convex angles
     poly = poly.get_xy()
-    for i in range(1, len(poly) - 1):
+    for i in range(len(poly) - 1):
         if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
         elif angle[tuple(poly[i])] == 1:
@@ -80,19 +86,24 @@ def getKernel(P):
     return K[len(poly) - 1]
 
 
+
+
+
+
+
+
 '''
 Reflex angle helper function for getKernel
 '''
 def _reflex(i, P, K, F, L):
     e = (P[i+1][0]-P[i][0], P[i+1][1]-P[i][1])
     lamb = Lambda(e)
-    lamb.next = P[i+1]
+    v = Node(P[i+1])
+    lamb.next = v
 
 # F is on or to the right of halfline Lambda e v
     if ccw(P[i], P[i+1], F[i]) != 1:
         x, y = F[i], F[i]
-        v = Node(P[i+1])
-        lamb.next = v
 
         while x != L[i] and findIntersection(lamb, v, x, x.next) == None:
             x = x.next
@@ -155,13 +166,21 @@ def _reflex(i, P, K, F, L):
 
 # Compute next L node in K
     L.append(L[i])
-    X = L[i].next
-    while X != K[i+1].tail and (ccw(P[i+1], X, X.next) == -1 and X != L[i]):
-        X = X.next
-    if X != L[i]:
-        L[i+1] = X
+    if L[i] != K[i+1].tail:
+        X = L[i].next
+        print(type(X))
+        while X != K[i+1].tail and (ccw(P[i+1], X, X.next) == -1 and X != L[i]):
+            X = X.next
+        if X != L[i]:
+            L[i+1] = X
 
     return 1
+
+
+
+
+
+
 
 
 '''
@@ -174,6 +193,7 @@ def _convex(i, P, K, F, L):
     lamb.prev = v
     v.next = lamb
 
+# L is on or to the right of Lambda e v
     if not (ccw(v, Node(P[i+1]), L[i]) == 1):
         x = L[i]
         y = L[i]
@@ -264,7 +284,9 @@ def _convex(i, P, K, F, L):
         K.append(K[i])
         # Follow reflex for F[i+1]
         F.append(F[i])
+        print(type(F[i]), type(F[i].next), F[i].next == K[i].tail)
         while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
+            print(type(F[i]))
             F[i+1] = F[i+1].next
 
         if type(K[i+1].head) == Lambda:
@@ -281,8 +303,15 @@ def _convex(i, P, K, F, L):
 
     return 1
 
+
+
+
+
+
+
+
 def JeffsAlgorithm(K):
-    # Construct the Polygon 
+    # Construct the Polygon
     vertices_array = []
 
     if (type(K.head) == Lambda) and (type(K.tail) == Lambda):
@@ -303,7 +332,7 @@ def JeffsAlgorithm(K):
         for i in range(4):
             if head_box_intersection == None:
                 head_box_intersection = findIntersection(bounding_box_corners[i % len(bounding_box_corners)], bounding_box_corners[(i + 1) % len(bounding_box_corners)], K.head.next, K.head)
-            
+
             if tail_box_intersection == None:
                 tail_box_intersection = findIntersection(bounding_box_corners[i % len(bounding_box_corners)], bounding_box_corners[(i + 1) % len(bounding_box_corners)], K.tail.prev, K.tail)
 
@@ -337,15 +366,15 @@ def JeffsAlgorithm(K):
         vertices_array.append(K.head.next.coords)
 
         return Polygon(vertices_array)
-    
+
     elif not (type(K.head) == Lambda) and not (type(K.tail) == Lambda):
         # K is a cyclic doubly linked list, so read each node into a Polygon object
         cur_node = K.head
-        
+
         while cur_node != K.tail:
             vertices_array.append(cur_node.coords)
             cur_node = cur_node.next
-        
+
         vertices_array.append(K.tail.coords)
         vertices_array.append(K.head.coords)
 
@@ -355,23 +384,63 @@ def JeffsAlgorithm(K):
         print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
         return None
 
+
+
+
+
+
+
 def plotPoint(ax, x, y, label):
     ax.plot(x, y, marker='o')
     ax.annotate(label, xy=(x, y), xytext=(x + 10, y + 10))
 
-def plotKi(ax, verts, label):
-    p = Polygon(verts)
+def plotKi(ax, p, label):
     p.set_alpha(0.4)
     p.set_color('r')
     plt.pause(5)
     ax.add_patch(p)
     ax.set_title("drawing " + label)
 
+
+
+
+
+
+
+
 def main():
+
     P = getInputPoly()
+
+    '''
     print(P.flex_dictionary)
+    print(P.polygon.get_xy())
+    '''
+
+
     q = getKernel(P)
-    print(q.get_xy())
+    # print(q.get_xy())
+
+
+
+    '''
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.subplots_adjust(bottom=0.2)
+    ax.set_xlim([0, 100])
+    ax.set_ylim([0, 100])
+
+    plotKi(ax, q, "K")
+    plt.show()
+    '''
+
+    '''
+    print(ccw([33.66935484, 32.78186275], [48.79032258, 44.73039216], [69.55645161, 45.95588235]))
+    print(ccw([48.79032258, 44.73039216], [69.55645161, 45.95588235], [39.91935484, 75.06127451]))
+    print(ccw([69.55645161, 45.95588235], [39.91935484, 75.06127451], [33.66935484, 32.78186275]))
+    print(ccw([39.91935484, 75.06127451], [33.66935484, 32.78186275], [48.79032258, 44.73039216]))
+    '''
+
     #print(P.polygon.get_xy())
     #print(P.flex_dictionary)
 
