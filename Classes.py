@@ -49,7 +49,7 @@ class Node(__BasicNode):
 		class_type = str(type(self)) + "\n"
 
 		# Coords
-		coords = str(type(self.coords)) + "\n"
+		coords = str(self.coords) + "\n"
 
 		neighbors = "\n" + "Next:	" + str(type(self.next)) + "\nPrev:	" + str(type(self.prev)) + "\n"
 
@@ -94,10 +94,10 @@ class Lambda(__BasicNode):
 
 
 		# Direction
-		direction = str(self.direction)
+		direction = str(self.direction) + "\n"
 
 
-		return "--------------------\n" + class_type + lambda_type + "--------------------\n"
+		return "--------------------\n" + class_type + lambda_type + direction + "--------------------\n"
 
 
 

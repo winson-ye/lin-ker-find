@@ -83,6 +83,13 @@ def getKernel(P):
         if result == -1:
             return Polygon([])
 
+        print("K[" + str(i) + "]:\n")
+        x = ker[i].head
+        while (not x == None) and (not x == ker[i].tail):
+            print(x)
+            x = x.next
+        print("\n\n\n\n\n")
+
     return K[len(poly) - 1]
 
 
@@ -192,18 +199,22 @@ def _convex(i, P, K, F, L):
     v = Node(P[i])
     lamb.prev = v
     v.next = lamb
+    print("lamb:\n", lamb)
+    print("v:\n", v)
 
 # L is on or to the right of Lambda e v
     if not (ccw(v, Node(P[i+1]), L[i]) == 1):
         x = L[i]
         y = L[i]
         while (not x == F[i]) and (findIntersection(lamb, v, x, x.prev) == None):
+            print("x:\n", x)
             x = x.prev
         if x == F[i]:
             return {}
 
         wprime = Node(findIntersection(lamb, v, x, x.prev))
         while (not y == K[i].getTail()) and (findIntersection(lamb, v, y, y.next) == None):
+            print("y:\n", y)
             y = y.next
 
         wdprime = None
@@ -284,7 +295,7 @@ def _convex(i, P, K, F, L):
         K.append(K[i])
         # Follow reflex for F[i+1]
         F.append(F[i])
-        print(type(F[i]), type(F[i].next), F[i].next == K[i].tail)
+        print("F[" + str(i) + "]:\n", F[i])
         while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
             print(type(F[i]))
             F[i+1] = F[i+1].next
@@ -416,15 +427,17 @@ def main():
 
 
     print(P.flex_dictionary)
-    print(P.polygon.get_xy())
+    print(P.polygon.get_xy(), "\n")
 
+    '''
     L = Lambda([1, 1])
     L.next = Node([1, 1])
     print(L)
+    '''
 
 
 
-    # q = getKernel(P)
+    q = getKernel(P)
     # print(q.get_xy())
 
 
