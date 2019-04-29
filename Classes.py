@@ -73,7 +73,7 @@ class Lambda(__BasicNode):
 	def __eq__(self, other):
 		return self is other
 
-	
+
 	def __str__(self):
 		# Class type
 		class_type = str(type(self)) + "\n"
@@ -226,7 +226,7 @@ class StructuredPoly:
 				added[oriented[v]] = 1
 
 		self._pts = lst
-		
+
 
 		return flexes
 
@@ -541,7 +541,11 @@ def findRegion(wprime, wdprime, v_iplus1):
 		return -1
 
 	else:
-		square_l2_norm_ratio = ((diff_1[0] ** 2) + (diff_1[1] ** 2)) / ((diff_2[0] ** 2) + (diff_2[1] ** 2))
+		den = ((diff_2[0] ** 2) + (diff_2[1] ** 2))
+		if den != 0:
+			square_l2_norm_ratio = ((diff_1[0] ** 2) + (diff_1[1] ** 2)) / den
+		else:
+			square_l2_norm_ratio = float("inf")
 
 		if 0 <= square_l2_norm_ratio <= 1:
 			return 0
