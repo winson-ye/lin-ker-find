@@ -13,13 +13,13 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 #triangle
-#P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
+P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 
 #chomper
 #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
 
 #star
-P = StructuredPoly([(0, 50), (30, 70), (50, 100), (70, 70), (100, 50), (70, 30), (50, 0), (30, 30), (0, 50)])
+#P = StructuredPoly([(0, 50), (30, 70), (50, 100), (70, 70), (100, 50), (70, 30), (50, 0), (30, 30), (0, 50)])
 
 
 def getInputPoly():
@@ -85,7 +85,6 @@ def getKernel(P):
         if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
         elif angle[tuple(poly[i])] == 1:
-            pdb.set_trace()
             result = _convex(i, poly, ker, F, L)
 
         if result == -1:
@@ -343,12 +342,6 @@ def _convex(i, P, K, F, L):
     return 1
 
 
-
-
-
-
-
-
 def JeffsAlgorithm(K):
     # Construct the Polygon
     vertices_array = []
@@ -379,7 +372,7 @@ def JeffsAlgorithm(K):
                 break
 
         if head_box_intersection == None or tail_box_intersection == None:
-            return Polygon[]
+            return Polygon([])
 
         # Append where the tail intersects the bounding box
         vertices_array.append(tail_box_intersection)
@@ -428,6 +421,7 @@ def JeffsAlgorithm(K):
 
 
 
+'''
 def JeffsAlgorithm(K):
     
     if type(K.head) == Lambda and type(K.tail) == Lambda:
@@ -452,11 +446,6 @@ def JeffsAlgorithm(K):
             raise ValueError("JeffsAlgorithm:\tKernel intersects bounding box once")
 
 
-
-
-
-            
-
     elif type(K.head) != Lambda and type(K.tail) != Lambda:    
         bounded_polygon_list = []
 
@@ -472,8 +461,7 @@ def JeffsAlgorithm(K):
 
     else:
         raise ValueError("JeffsAlgorithm:\tGiven a Kernel with a single Lambda")
-        
-
+'''
 
 
 
@@ -484,13 +472,13 @@ def JeffsAlgorithm(K):
     input("Press [enter] to continue.")
 '''
 
-def plotA(ax, p, F, L, i):
+def plotA(ax, k, F, L, i):
     ax.set_xlim(XLIM)
     ax.set_ylim(YLIM)
-    p.set_alpha(0.4)
-    p.set_color('r')
+    k.set_alpha(0.4)
+    k.set_color('r')
     ax.add_patch(P.polygon)
-    ax.add_patch(p)
+    ax.add_patch(k)
     ax.set_title("drawing K" + str(i))
     ax.legend(loc='upper left')
 
