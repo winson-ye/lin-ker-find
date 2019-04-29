@@ -1,17 +1,21 @@
 import matplotlib.pyplot as plt
 from Classes import *
 
+
 '''
 Plot input polygon to compute getKernel
 '''
 
+XLIM = [0, 100]
+YLIM = [0, 100]
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
+
 def getInputPoly():
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
     ax.set_title('click done to create your polygon')
     plt.subplots_adjust(bottom=0.2)
-    ax.set_xlim([0, 100])
-    ax.set_ylim([0, 100])
 
     axdone = plt.axes([0.81, 0.05, 0.1, 0.075])
     bdone = Button(axdone, 'Done')
@@ -68,15 +72,18 @@ def getKernel(P):
     print(poly)
     #print(range(len(poly) - 1))
     for i in range(len(poly) - 1):
-        print(i)
+        #print(i)
         if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
         elif angle[tuple(poly[i])] == 1:
             result = _convex(i, poly, ker, F, L)
 
         if result == -1:
-            return Polygon([[-100, -100], [-100, -101], [-101, -100], [-100, -100]])
+            return Polygon([])
 
+        plotKi(ax, JeffsAlgorithm(ker[i]), 'K' + str(i+1))
+
+        '''
         print("F[" + str(i) + "]:\n")
         print(F[i])
         print("L[" + str(i) + "]:\n")
@@ -89,6 +96,7 @@ def getKernel(P):
             x = x.next
         print(x)
         print("\n\n\n\n\n")
+        '''
 
     return JeffsAlgorithm(ker[len(poly) - 1])
 
@@ -414,11 +422,14 @@ def plotPoint(ax, x, y, label):
     ax.annotate(label, xy=(x, y), xytext=(x + 10, y + 10))
 
 def plotKi(ax, p, label):
+    ax.set_xlim(XLIM)
+    ax.set_ylim(YLIM)
     p.set_alpha(0.4)
     p.set_color('r')
-    plt.pause(5)
     ax.add_patch(p)
     ax.set_title("drawing " + label)
+    input("Press [enter] to continue.")
+    ax.cla()
 
 
 
@@ -433,11 +444,11 @@ def main():
 
     # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
     #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
-    # P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
+    P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
 
 
-    print(P.flex_dictionary)
-    print(P.polygon.get_xy(), "\n")
+    #print(P.flex_dictionary)
+    #print(P.polygon.get_xy(), "\n")
 
     '''
     L = Lambda([1, 1])
@@ -447,9 +458,11 @@ def main():
 
     #print("ccw", ccw((2, 4), (2, 6), (10, 8)))
 
+    plt.ion()
+    plt.show()
 
     q = getKernel(P)
-    print(q.get_xy())
+    #print(q.get_xy())
 
 
 
