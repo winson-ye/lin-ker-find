@@ -218,7 +218,7 @@ def _convex(i, P, K, F, L):
             #print("x:\n", x)
             x = x.prev
         if x == F[i]:
-            return {}
+            return -1
 
         wprime = Node(findIntersection(lamb, v, x, x.prev))
         while (not y == K[i].getTail()) and (findIntersection(lamb, v, y, y.next) == None):
@@ -432,7 +432,7 @@ def main():
     # P = getInputPoly()
 
     # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
-    P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
+    #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
     # P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
 
 
