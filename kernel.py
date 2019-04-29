@@ -65,7 +65,10 @@ def getKernel(P):
 
 # Iterate over vertices, handle reflex and convex angles
     poly = poly.get_xy()
+    print(poly)
+    #print(range(len(poly) - 1))
     for i in range(len(poly) - 1):
+        print(i)
         if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
         elif angle[tuple(poly[i])] == 1:
@@ -73,6 +76,11 @@ def getKernel(P):
 
         if result == -1:
             return Polygon([[-100, -100], [-100, -101], [-101, -100], [-100, -100]])
+
+        print("F[" + str(i) + "]:\n")
+        print(F[i])
+        print("L[" + str(i) + "]:\n")
+        print(L[i])
 
         print("K[" + str(i) + "]:\n")
         x = ker[i].head
@@ -101,19 +109,20 @@ def _reflex(i, P, K, F, L):
     lamb.next = v
 
 # F is on or to the right of halfline Lambda e v
+    #print("ccw: ", ccw(P[i], P[i+1], F[i]))
     if ccw(P[i], P[i+1], F[i]) != 1:
         x, y = F[i], F[i]
 
-        print("x:\n", x)
+        #print("x:\n", x)
         while x != L[i] and findIntersection(lamb, v, x, x.next) == None:
-            print("x:\n", x)
+            #print("x:\n", x)
             x = x.next
         if x == L[i]:
             return -1
         wprime = Node(findIntersection(lamb, v, x, x.next))
 
         while y != K[i].getHead() and findIntersection(lamb, v, y, y.prev) == None:
-            print("y:\n", y)
+            #print("y:\n", y)
             y = y.prev
         wdprime = None
         if y != K[i].getHead():
@@ -154,6 +163,7 @@ def _reflex(i, P, K, F, L):
             wprime.prev = wdprime
             wdprime.next = wprime
 
+        print("wdprime: ", wdprime)
         if wdprime != None:
             F.append(wdprime)
         else:
@@ -194,22 +204,25 @@ def _convex(i, P, K, F, L):
     v = Node(P[i])
     lamb.prev = v
     v.next = lamb
+
+    '''
     print("lamb:\n", lamb)
     print("v:\n", v)
+    '''
 
 # L is on or to the right of Lambda e v
     if not (ccw(v, Node(P[i+1]), L[i]) == 1):
         x = L[i]
         y = L[i]
         while (not x == F[i]) and (findIntersection(lamb, v, x, x.prev) == None):
-            print("x:\n", x)
+            #print("x:\n", x)
             x = x.prev
         if x == F[i]:
             return {}
 
         wprime = Node(findIntersection(lamb, v, x, x.prev))
         while (not y == K[i].getTail()) and (findIntersection(lamb, v, y, y.next) == None):
-            print("y:\n", y)
+            #print("y:\n", y)
             y = y.next
 
         wdprime = None
@@ -290,9 +303,9 @@ def _convex(i, P, K, F, L):
         K.append(K[i])
         # Follow reflex for F[i+1]
         F.append(F[i])
-        print("F[" + str(i) + "]:\n", F[i])
+        #print("F[" + str(i) + "]:\n", F[i])
         while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
-            print(type(F[i]))
+            #print(type(F[i]))
             F[i+1] = F[i+1].next
 
         if type(K[i+1].head) == Lambda:
@@ -419,8 +432,8 @@ def main():
     # P = getInputPoly()
 
     # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
-    # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
-    P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
+    P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
+    # P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
 
 
     print(P.flex_dictionary)
@@ -432,6 +445,7 @@ def main():
     print(L)
     '''
 
+    #print("ccw", ccw((2, 4), (2, 6), (10, 8)))
 
 
     q = getKernel(P)

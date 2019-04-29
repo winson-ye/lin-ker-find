@@ -168,6 +168,8 @@ class StructuredPoly:
 		'''
 		I want to go around oriented until I find start reflex vertex
 		'''
+
+		'''
 		i = 0
 		j = 1
 		k = 2
@@ -181,16 +183,18 @@ class StructuredPoly:
 			i += 1
 			j += 1
 			k += 1
+		'''
 
 		'''
 		Now start labeling the vertices starting from reflex_index
 		'''
 
-		i = reflex_index % last
-		j = (reflex_index + 1) % last
-		k = (reflex_index + 2) % last
+		i = -1 % last
+		j = 0 % last
+		k = 1 % last
 
 		while len(flexes) < len(oriented):
+			print("(", i, oriented[i], ") (", j,  oriented[j], ") (", k, oriented[k], ")", ccw(oriented[i], oriented[j], oriented[k]))
 			if ccw(oriented[i], oriented[j], oriented[k]) == -1:
 				#mark point j as reflex
 				flexes[oriented[j]] = -1
@@ -201,6 +205,7 @@ class StructuredPoly:
 			i = (i + 1) % last
 			j = (j + 1) % last
 			k = (k + 1) % last
+
 
 		lst, added = [], dict()
 		for v in range(len(self._pts)):
@@ -220,6 +225,7 @@ class StructuredPoly:
 				added[oriented[v]] = 1
 
 		self._pts = lst
+		
 
 		return flexes
 
@@ -277,7 +283,7 @@ def det3x3(a, b, c, d, e, f, g, h, i):
 	#	[a, b, c;
 	#	 d, e, f;
 	#	 g, h, i]
-	return (a * det2x2(e, h, i, f)) - (b * det2x2(d, f, g, i)) + (c * det2x2(d, e, g, h))
+	return (a * det2x2(e, f, h, i)) - (b * det2x2(d, f, g, i)) + (c * det2x2(d, e, g, h))
 
 
 
@@ -323,8 +329,15 @@ def ccw(a, b, c):
 
 
 	else:
-		determinant = det2x2(a[0] - c[0], b[0] - c[0], a[1] - b[1], b[1] - c[1])
-
+		determinant = det2x2(a[0] - c[0], b[0] - c[0], a[1] - c[1], b[1] - c[1])
+		#determinant = det3x3(a[0], b[0], c[0], a[1], b[1], c[1], 1, 1, 1)
+		'''
+		print("ccw()")
+		print(a)
+		print(b)
+		print(c)
+		print(str(det3x3(a[0], b[0], c[0], a[1], b[1], c[1], 1, 1, 1)))
+		'''
 		if determinant == 0:
 			return 0
 		elif determinant > 0:
