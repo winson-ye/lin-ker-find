@@ -345,7 +345,7 @@ def JeffsAlgorithm(K):
     if (type(K.head) == Lambda) and (type(K.tail) == Lambda):
         cur_node = K.head.next
 
-        bounding_box_corners = [Node((0, 0)), Node((100, 0)), Node((100, 100)), Node((0, 100))]
+        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[1], YLIM[0]))]
 
         # Append coords of all non-lambda nodes to vertices_array
         while cur_node != K.tail:
