@@ -367,6 +367,9 @@ def JeffsAlgorithm(K):
             if head_box_intersection != None and tail_box_intersection != None:
                 break
 
+        if head_box_intersection == None or tail_box_intersection == None:
+            return Polygon[]
+
         # Append where the tail intersects the bounding box
         vertices_array.append(tail_box_intersection)
 
@@ -411,6 +414,55 @@ def JeffsAlgorithm(K):
     else:
         print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
         return None
+
+
+
+def JeffsAlgorithm(K):
+    
+    if type(K.head) == Lambda and type(K.tail) == Lambda:
+        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[1], YLIM[0]))]
+
+        unbounded_polygon_list = []
+        bounding_box_intersections = []
+
+        cur_node = K.head
+
+        # Find where the kernel intersects the bounding box
+        while cur_node != K.tail:
+            for i in range(4):
+                intersection = findIntersection(bounding_box_corners[i % 4], bounding_box_corners[i % 4], cur_node, cur_node.next)
+                
+                if intersection != None:
+                    bounding_box_intersections.append(intersection)
+
+            cur_node = cur_node.next
+
+        if len(bounding_box_intersections) == 1:
+            raise ValueError("JeffsAlgorithm:\tKernel intersects bounding box once")
+
+
+
+
+
+            
+
+    elif type(K.head) != Lambda and type(K.tail) != Lambda:    
+        bounded_polygon_list = []
+
+        cur_node = K.head
+        while cur_node != K.tail:
+            bounded_polygon_list.append((cur_node[0], cur_node[1]))
+            cur_node = cur_node.next
+
+        bounded_polygon_list.append((K.tail[0], K.tail[1]))
+        bounded_polygon_list.append((K.head[0], K.head[1]))
+
+        return Polygon(bounded_polygon_list)
+
+    else:
+        raise ValueError("JeffsAlgorithm:\tGiven a Kernel with a single Lambda")
+        
+
 
 
 
