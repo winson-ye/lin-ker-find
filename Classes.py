@@ -291,6 +291,10 @@ def det3x3(a, b, c, d, e, f, g, h, i):
 
 
 def ccw(a, b, c):
+
+	if type(a) == None or type(b) == None or type(c) == None:
+		raise TypeError(a, b, c)
+
 	determinant = 0
 
 	if type(a) == Lambda or type(b) == Lambda or type(c) == Lambda:
