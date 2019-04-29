@@ -85,6 +85,7 @@ def getKernel(P):
         if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
         elif angle[tuple(poly[i])] == 1:
+            pdb.set_trace()
             result = _convex(i, poly, ker, F, L)
 
         if result == -1:
@@ -217,7 +218,6 @@ def _reflex(i, P, K, F, L):
 Convex angle helper function for getKernel
 '''
 def _convex(i, P, K, F, L):
-    pdb.set_trace()
     e = (P[i+1][0] - P[i][0], P[i+1][1] - P[i][1])
     lamb = Lambda(e)
     v = Node(P[i])
@@ -288,6 +288,7 @@ def _convex(i, P, K, F, L):
             if region == -1:
                 # Follow reflex for F[i+1]
                 F.append(F[i])
+                #the below line has F[i+1].next being None
                 while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
                     F[i+1] = F[i+1].next
                 L.append(wdprime)
