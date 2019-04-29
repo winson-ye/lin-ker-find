@@ -12,6 +12,9 @@ YLIM = [0, 100]
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
+#P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
+#P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
+
 
 def getInputPoly():
     ax.set_title('click done to create your polygon')
@@ -426,6 +429,7 @@ def plotA(ax, p, F, L, i):
     ax.set_ylim(YLIM)
     p.set_alpha(0.4)
     p.set_color('r')
+    ax.add_patch(P.polygon)
     ax.add_patch(p)
     ax.set_title("drawing K" + str(i))
     ax.legend(loc='upper left')
@@ -449,7 +453,7 @@ def main():
 
     # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
     #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
-    P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
+    #P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 
 
     #print(P.flex_dictionary)
