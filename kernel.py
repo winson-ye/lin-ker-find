@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from Classes import *
-
+import pdb
 
 '''
 Plot input polygon to compute getKernel
@@ -81,7 +81,8 @@ def getKernel(P):
         if result == -1:
             return Polygon([])
 
-        plotKi(ax, JeffsAlgorithm(ker[i]), 'K' + str(i+1))
+        plotA(ax, JeffsAlgorithm(ker[i]), F[i], L[i], i)
+        ax.cla()
 
         '''
         print("F[" + str(i) + "]:\n")
@@ -414,27 +415,31 @@ def JeffsAlgorithm(K):
 
 
 
-
-
-
-def plotPoint(ax, x, y, label):
-    ax.plot(x, y, marker='o')
+'''def plotPoint(ax, x, y, label):
+    ax.plot(x, y, marker='o', color='b')
     ax.annotate(label, xy=(x, y), xytext=(x + 10, y + 10))
+    input("Press [enter] to continue.")
+'''
 
-def plotKi(ax, p, label):
+def plotA(ax, p, F, L, i):
     ax.set_xlim(XLIM)
     ax.set_ylim(YLIM)
     p.set_alpha(0.4)
     p.set_color('r')
     ax.add_patch(p)
-    ax.set_title("drawing " + label)
+    ax.set_title("drawing K" + str(i))
+    ax.legend(loc='upper left')
+
+    if type(F) != Lambda:
+        ax.plot(F.coords[0], F.coords[1], marker='o', label='F[' + str(i) + ']')
+        #x.annotate('F[' + str(i) + ']', xy=(F.coords[0], F.coords[1]), xytext=(F.coords[0]+10, F.coords[1]+10))
+    if type(L) != Lambda:
+        ax.plot(L.coords[0], L.coords[1], marker='o', label='L[' + str(i) + ']')
+        #ax.annotate('L[' + str(i) + ']', xy=(L.coords[0], L.coords[1]), xytext=(L.coords[0]+10, L.coords[1]+10))
+
+    plt.legend()
+
     input("Press [enter] to continue.")
-    ax.cla()
-
-
-
-
-
 
 
 
