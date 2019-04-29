@@ -73,6 +73,7 @@ class Lambda(__BasicNode):
 	def __eq__(self, other):
 		return self is other
 
+	
 	def __str__(self):
 		# Class type
 		class_type = str(type(self)) + "\n"
