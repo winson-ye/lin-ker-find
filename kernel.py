@@ -12,6 +12,15 @@ YLIM = [0, 100]
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
+#triangle
+#P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
+
+#chomper
+#P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
+
+#star
+P = StructuredPoly([(0, 50), (30, 70), (50, 100), (70, 70), (100, 50), (70, 30), (50, 0), (30, 30), (0, 50)])
+
 
 def getInputPoly():
     ax.set_title('click done to create your polygon')
@@ -71,7 +80,7 @@ def getKernel(P):
     poly = poly.get_xy()
     print(poly)
     #print(range(len(poly) - 1))
-    for i in range(len(poly) - 1):
+    for i in range(len(poly) - 2):
         #print(i)
         if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
@@ -99,7 +108,7 @@ def getKernel(P):
         print("\n\n\n\n\n")
         '''
 
-    return JeffsAlgorithm(ker[len(poly) - 1])
+    return JeffsAlgorithm(ker[len(poly) - 2])
 
 
 
@@ -208,6 +217,7 @@ def _reflex(i, P, K, F, L):
 Convex angle helper function for getKernel
 '''
 def _convex(i, P, K, F, L):
+    pdb.set_trace()
     e = (P[i+1][0] - P[i][0], P[i+1][1] - P[i][1])
     lamb = Lambda(e)
     v = Node(P[i])
@@ -426,6 +436,7 @@ def plotA(ax, p, F, L, i):
     ax.set_ylim(YLIM)
     p.set_alpha(0.4)
     p.set_color('r')
+    ax.add_patch(P.polygon)
     ax.add_patch(p)
     ax.set_title("drawing K" + str(i))
     ax.legend(loc='upper left')
@@ -449,7 +460,8 @@ def main():
 
     # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
     #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
-    P = StructuredPoly([(0,0), (1,1), (0,2), (2,1), (0,0)])
+    #P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
+    #P = StructuredPoly([0, 50], [30, 70], [50, 100], [70, 70], [100, 50], [70, 30], [50, 0], [30, 30])
 
 
     #print(P.flex_dictionary)
