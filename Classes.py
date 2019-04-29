@@ -156,6 +156,8 @@ class StructuredPoly:
 
 	def setFlex(self):
 
+		
+
 		'''
 		Get an oriented list of vertices that will show me which way to walk around the polygon
 		using orientVert
