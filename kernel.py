@@ -423,9 +423,11 @@ def JeffsAlgorithm(K):
 
             cur_node = cur_node.next
 
+        cur_node = cur_node.prev
         first_node = cur_node
         print(int_dct_H)
         if not int_dct_H:
+            #pdb.set_trace()
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
         for key, value in int_dct_H.items():
@@ -436,6 +438,7 @@ def JeffsAlgorithm(K):
                     t_dct[key] = (value[0] - cur_node.next[0]) / (-cur_node[0])
 
             elif cur_node == K.tail:
+                #pdb.set_trace()
                 return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
             else:
@@ -460,27 +463,30 @@ def JeffsAlgorithm(K):
             for i in range(4):
                 intersection = Node(findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node.prev, cur_node))
 
-                if intersection != None:
+                if intersection.coords != None:
                     int_dct_F[i] = intersection
 
             cur_node = cur_node.prev
 
+        cur_node = cur_node.next
         last_node = cur_node
+
+        pdb.set_trace()
         if not int_dct_F:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
         for key, value in int_dct_F.items():
             if cur_node == K.tail:
                 if cur_node[0] == 0:
-                    t_dct[key] = (value[1] - cur_node.next[1]) / cur_node[1]
+                    t_dct[key] = (value[1] - cur_node.prev[1]) / cur_node[1]
                 else:
-                    t_dct[key] = (value[0] - cur_node.next[0]) / cur_node[0]
+                    t_dct[key] = (value[0] - cur_node.prev[0]) / cur_node[0]
 
             else:
                 if cur_node[0] == 0:
-                    t_dct[key] = (value[1] - cur_node.next[1]) / (cur_node[1] - cur_node.next[1])
+                    t_dct[key] = (value[1] - cur_node.prev[1]) / (cur_node[1] - cur_node.prev[1])
                 else:
-                    t_dct[key] = (value[0] - cur_node.next[0]) / (cur_node[0] - cur_node.next[0])
+                    t_dct[key] = (value[0] - cur_node.prev[0]) / (cur_node[0] - cur_node.prev[0])
 
         m = max(t_dct.values())
         for key in t_dct.keys():
@@ -488,6 +494,8 @@ def JeffsAlgorithm(K):
                 k = key
                 break
         tail_intersect = int_dct_F[k]
+
+        pdb.set_trace()
 
         if head_intersect.coords == tail_intersect.coords:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
@@ -505,6 +513,7 @@ def JeffsAlgorithm(K):
 
         elif tail_intersect[1] == 100:
             corner_index = 3
+        pdb.set_trace()
 
 
         pt_lst, cur_node = [], first_node
