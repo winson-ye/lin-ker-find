@@ -40,7 +40,7 @@ class Node(__BasicNode):
 		return self.coords[i]
 
 	def __eq__(self, other):
-		if other == None:
+		if type(other) != Node:
 			return False
 		return self.coords == other.coords
 
@@ -73,7 +73,7 @@ class Lambda(__BasicNode):
 		return self.direction[i]
 
 	def __eq__(self, other):
-		if other == None:
+		if type(other) != Lambda:
 			return False
 		if self.next == None:
 			return self.direction == other.direction and self.prev.coords == other.prev.coords
