@@ -15,7 +15,7 @@ P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
 
 #star
-#P = StructuredPoly([(0, 50), (30, 70), (50, 100), (70, 70), (100, 50), (70, 30), (50, 0), (30, 30), (0, 50)])
+P = StructuredPoly([(0, 50), (30, 70), (50, 100), (70, 70), (100, 50), (70, 30), (50, 0), (30, 30), (0, 50)])
 
 # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
 
@@ -408,13 +408,13 @@ def JeffsAlgorithm(K):
 
 def JeffsAlgorithm(K):
 
-    pdb.set_trace()
+    #pdb.set_trace()
 
     if type(K.head) == Lambda and type(K.tail) == Lambda:
 
         cur_node, int_dct_H, t_dct = K.head, dict(), dict()
         bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[0], YLIM[1]))]
-        pdb.set_trace
+        #pdb.set_trace
         while cur_node != K.tail and not int_dct_H:
             for i in range(4):
                 intersection = findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node, cur_node.next)
@@ -428,7 +428,7 @@ def JeffsAlgorithm(K):
         cur_node = cur_node.prev
         print(int_dct_H)
         if not int_dct_H:
-            #pdb.set_trace()
+            ##pdb.set_trace()
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
         for key, value in int_dct_H.items():
@@ -439,11 +439,11 @@ def JeffsAlgorithm(K):
                     t_dct[key] = (value[0] - cur_node.next[0]) / (-cur_node[0])
 
             elif cur_node == K.tail:
-                #pdb.set_trace()
+                ##pdb.set_trace()
                 return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
             else:
-                #pdb.set_trace()
+                ##pdb.set_trace()
                 if cur_node[0] == 0:
                     t_dct[key] = (value[1] - cur_node.next[1]) / (cur_node[1] - cur_node.next[1])
                 else:
@@ -472,7 +472,7 @@ def JeffsAlgorithm(K):
         last_node = cur_node
         cur_node = cur_node.next
 
-        #pdb.set_trace()
+        ##pdb.set_trace()
         if not int_dct_F:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
@@ -496,7 +496,7 @@ def JeffsAlgorithm(K):
                 break
         tail_intersect = int_dct_F[k]
 
-        pdb.set_trace()
+        #pdb.set_trace()
 
         if head_intersect.coords == tail_intersect.coords:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
@@ -514,7 +514,7 @@ def JeffsAlgorithm(K):
 
         elif tail_intersect[1] == 100:
             corner_index = 3
-        pdb.set_trace()
+        #pdb.set_trace()
 
 
         pt_lst, cur_node = [head_intersect.coords], first_node
@@ -585,33 +585,42 @@ def main():
     '''
 
     #print("ccw", ccw((2, 4), (2, 6), (10, 8)))
+    '''
     L1 = Lambda((-1, -1))
     L2 = Lambda((1, -1))
-    N = Node((100, 50))
-    L1.next = N; N.prev = L1
-    N.next = L2; L2.prev = N
-    k = K(L1, L2)
-    h = k.head
-    while h != k.tail:
-        print(h)
-        h = h.next
-    print(h)
+    N = Node((-20, 50))
+    N2 = Node((90, 100))
+    N3 = Node((90, 0))
+    '''
+    #L1.next = N; N.prev = L1
+    #N.next = L2; L2.prev = N
+    #k = K(L1, L2)
+    '''
+    N.next = N2; N2.prev = N
+    N.prev = N3; N3.next = N
+    N2.next = N3; N3.prev = N2
+    k = K(N, N3)
+    '''
+
     #I1 = Node(findIntersection(L1, N, Node((0, 0)), Node((0, 100))))
     #I2 = Node(findIntersection(L1, N, Node((0, 100)), Node((100, 100))))
     #print(I1)
     #print(I2)
-    #pdb.set_trace()
+    ##pdb.set_trace()
     #print((I1[0]-N[0])/-L1[0])
     #print(findIntersection(Node((0, 0)), Node((0, 100)), L1, N))
-    P = JeffsAlgorithm(k)
-    print(P.get_xy())
+    #P = JeffsAlgorithm(k)
+    #print(P.get_xy())
+    #ax.add_patch(P)
+    #ax.set_xlim([0, 100])
+    #ax.set_ylim([0, 100])
     #plotA(ax, P, N, N, 1)
 
     #plt.ion()
     #plt.show()
 
-    #q = getKernel(P)
-    #print(q.get_xy())
+    q = getKernel(P)
+    print(q.get_xy())
 
 
     '''
