@@ -1,10 +1,5 @@
 import matplotlib.pyplot as plt
 from Classes import *
-import pdb
-
-'''
-Plot input polygon to compute getKernel
-'''
 
 XLIM = [0, 100]
 YLIM = [0, 100]
@@ -20,6 +15,8 @@ P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 
 #star
 #P = StructuredPoly([(0, 50), (30, 70), (50, 100), (70, 70), (100, 50), (70, 30), (50, 0), (30, 30), (0, 50)])
+
+# P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
 
 
 def getInputPoly():
@@ -111,12 +108,6 @@ def getKernel(P):
     return JeffsAlgorithm(ker[len(poly) - 2])
 
 
-
-
-
-
-
-
 '''
 Reflex angle helper function for getKernel
 '''
@@ -205,13 +196,6 @@ def _reflex(i, P, K, F, L):
             L[i+1] = X
 
     return 1
-
-
-
-
-
-
-
 
 '''
 Convex angle helper function for getKernel
@@ -419,8 +403,6 @@ def JeffsAlgorithm(K):
         print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
         return None
 
-
-
 '''
 def JeffsAlgorithm(K):
     
@@ -463,16 +445,9 @@ def JeffsAlgorithm(K):
         raise ValueError("JeffsAlgorithm:\tGiven a Kernel with a single Lambda")
 '''
 
-
-
-
-'''def plotPoint(ax, x, y, label):
-    ax.plot(x, y, marker='o', color='b')
-    ax.annotate(label, xy=(x, y), xytext=(x + 10, y + 10))
-    input("Press [enter] to continue.")
-'''
-
 def plotA(ax, k, F, L, i):
+    #if type(k) != tuple:
+    #    raise TypeError(k)
     ax.set_xlim(XLIM)
     ax.set_ylim(YLIM)
     k.set_alpha(0.4)
@@ -493,17 +468,9 @@ def plotA(ax, k, F, L, i):
 
     input("Press [enter] to continue.")
 
-
-
 def main():
 
     # P = getInputPoly()
-
-    # P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
-    #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
-    #P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
-    #P = StructuredPoly([0, 50], [30, 70], [50, 100], [70, 70], [100, 50], [70, 30], [50, 0], [30, 30])
-
 
     #print(P.flex_dictionary)
     #print(P.polygon.get_xy(), "\n")
@@ -521,8 +488,6 @@ def main():
 
     q = getKernel(P)
     #print(q.get_xy())
-
-
 
     '''
     fig = plt.figure()
