@@ -197,7 +197,7 @@ class StructuredPoly:
 		k = 1 % last
 
 		while len(flexes) < len(oriented):
-			print("(", i, oriented[i], ") (", j,  oriented[j], ") (", k, oriented[k], ")", ccw(oriented[i], oriented[j], oriented[k]))
+			#print("(", i, oriented[i], ") (", j,  oriented[j], ") (", k, oriented[k], ")", ccw(oriented[i], oriented[j], oriented[k]))
 			if ccw(oriented[i], oriented[j], oriented[k]) == -1:
 				#mark point j as reflex
 				flexes[oriented[j]] = -1
@@ -356,7 +356,8 @@ def ccw(a, b, c):
 
 def findIntersection(v1, v2, u1, u2):
 	p1 = p2 = q1 = q2 = None
-	v1_v2_is_ray = u1_u2_is_ray = False
+	v1_v2_is_ray = False
+	u1_u2_is_ray = False
 
 	### Handle the inputs v1 and v2 and determine if they denote a line segment or ray
 	# If v1 is a Lambda and v2 is a Node or vice versa
@@ -471,8 +472,9 @@ def findIntersection(v1, v2, u1, u2):
 		if (0 <= t0 <= 1) and (0 <= t1 <= 1):
 			return intersection
 
+	return None
 	#print("Final return")
-	raise ValueError("findIntersection: YOU DONE GOOFED")
+	#raise ValueError("findIntersection: YOU DONE GOOFED")
 
 
 def slope(v1, v2):
