@@ -472,6 +472,7 @@ def findIntersection(v1, v2, u1, u2):
 		if (0 <= t0 <= 1) and (0 <= t1 <= 1):
 			return intersection
 
+	print("No intersection")
 	return None
 	#print("Final return")
 	#raise ValueError("findIntersection: YOU DONE GOOFED")
@@ -515,7 +516,7 @@ def slope(v1, v2):
 			return 0.0
 		return num / den
 
-	return None
+	raise ValueError("Slope:	error")
 
 
 
