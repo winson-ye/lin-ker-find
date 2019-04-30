@@ -9,7 +9,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 #triangle
-P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
+#P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 
 #chomper
 #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
@@ -45,13 +45,13 @@ Output: Polygon (matplotlib.patches)
 '''
 def getKernel(P):
     ker = P.k_list
-    poly = P.polygon
+    poly = [tuple(x) for x in P.polygon.get_xy()]
     angle = P.flex_dictionary
     F = P.F_list
     L = P.L_list
 
 # Check if there exists a reflex angle
-    list_of_vertices = poly.get_xy()
+    list_of_vertices = poly
     if angle[tuple(list_of_vertices[0])] == -1:
     # If so, make a K_0
         initial_node = Node(list_of_vertices[0])
@@ -75,10 +75,9 @@ def getKernel(P):
         return poly
 
 # Iterate over vertices, handle reflex and convex angles
-    poly = poly.get_xy()
     print(poly)
     #print(range(len(poly) - 1))
-    for i in range(len(poly) - 2):
+    for i in range(1, len(poly) - 2):
         #print(i)
         if angle[tuple(poly[i])] == -1:
             result = _reflex(i, poly, ker, F, L)
@@ -88,14 +87,14 @@ def getKernel(P):
         if result == -1:
             return (Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)]), -1)
 
-        plotA(ax, (JeffsAlgorithm(ker[i]), 1), F[i], L[i], i)
+        plotA(ax, JeffsAlgorithm(ker[i]), F[i-1], L[i-1], i)
         ax.cla()
 
         '''
         print("F[" + str(i) + "]:\n")
-        print(F[i])
+        print(F[i-1])
         print("L[" + str(i) + "]:\n")
-        print(L[i])
+        print(L[i-1])
 
         print("K[" + str(i) + "]:\n")
         x = ker[i].head
@@ -119,29 +118,30 @@ def _reflex(i, P, K, F, L):
     lamb.next = v
 
 # F is on or to the right of halfline Lambda e v
-    #print("ccw: ", ccw(P[i], P[i+1], F[i]))
-    if ccw(P[i], P[i+1], F[i]) != 1:
-        x, y = F[i], F[i]
+    #print("ccw: ", ccw(P[i], P[i+1], F[i-1]))
+    if ccw(P[i], P[i+1], F[i-1]) != 1:
+        x, y = F[i-1], F[i-1]
 
         #print("x:\n", x)
-        while x != L[i] and findIntersection(lamb, v, x, x.next) == None:
+        while x != L[i-1] and findIntersection(lamb, v, x, x.next) == None:
             #print("x:\n", x)
             x = x.next
-        if x == L[i]:
+        if x == L[i-1]:
             return -1
         wprime = Node(findIntersection(lamb, v, x, x.next))
 
-        while y != K[i].getHead() and findIntersection(lamb, v, y, y.prev) == None:
+        pdb.set_trace()
+        while findIntersection(lamb, v, y, y.next) == None and y != K[i-1].getHead():
             #print("y:\n", y)
             y = y.prev
         wdprime = None
-        if y != K[i].getHead():
-            wdprime = Node(findIntersection(lamb, v, y, y.prev))
+        if y != K[i-1].getHead():
+            wdprime = Node(findIntersection(lamb, v, y, y.next))
 
-# Currently using the same instance for K[i+1] and K[i]
-        K.append(K[i])
+# Currently using the same instance for K[i] and K[i-1]
+        K.append(K[i-1])
         x, y = x.next, y.prev
-        head, tail = K[i].head, K[i].tail
+        head, tail = K[i-1].head, K[i-1].tail
 
         if wdprime != None:
             y.next = wdprime
@@ -156,7 +156,7 @@ def _reflex(i, P, K, F, L):
             wprime.prev = lamb
             lamb.next = wprime
             wprime.next = x
-            K[i+1].head = lamb
+            K[i].head = lamb
 
         else:
             z = tail
@@ -164,8 +164,8 @@ def _reflex(i, P, K, F, L):
                 z = z.prev
             wdprime = Node(findIntersection(z.prev, z, P[i], P[i+1]))
             z = z.prev
-            K[i+1].head = wprime
-            K[i+1].tail = wdprime
+            K[i].head = wprime
+            K[i].tail = wdprime
             x.prev = wprime
             wprime.next = x
             z.next = wdprime
@@ -181,20 +181,20 @@ def _reflex(i, P, K, F, L):
 
 # F is strictly on left
     else:
-        K.append(K[i])
-        F.append(F[i])
-        while F[i+1] != K[i+1].tail and (ccw(P[i+1], F[i+1], F[i+1].next) == 1):
-            F[i+1] = F[i+1].next
+        K.append(K[i-1])
+        F.append(F[i-1])
+        while F[i] != K[i].tail and (ccw(P[i+1], F[i], F[i].next) == 1):
+            F[i] = F[i].next
 
 # Compute next L node in K
-    L.append(L[i])
-    if L[i] != K[i+1].tail:
-        X = L[i].next
+    L.append(L[i-1])
+    if L[i-1] != K[i].tail:
+        X = L[i-1].next
         print(type(X))
-        while X != K[i+1].tail and (ccw(P[i+1], X, X.next) == -1 and X != L[i]):
+        while X != K[i].tail and (ccw(P[i+1], X, X.next) == -1 and X != L[i-1]):
             X = X.next
-        if X != L[i]:
-            L[i+1] = X
+        if X != L[i-1]:
+            L[i-1] = X
 
     return 1
 
@@ -214,26 +214,27 @@ def _convex(i, P, K, F, L):
     '''
 
 # L is on or to the right of Lambda e v
-    if not (ccw(v, Node(P[i+1]), L[i]) == 1):
-        x = L[i]
-        y = L[i]
-        while (not x == F[i]) and (findIntersection(lamb, v, x, x.prev) == None):
+    pdb.set_trace()
+    if not (ccw(v, Node(P[i+1]), L[i-1]) == 1):
+        x = L[i-1]
+        y = L[i-1]
+        while (not x == F[i-1]) and (findIntersection(lamb, v, x, x.prev) == None):
             #print("x:\n", x)
             x = x.prev
-        if x == F[i]:
+        if x == F[i-1]:
             return -1
 
         wprime = Node(findIntersection(lamb, v, x, x.prev))
-        while (not y == K[i].getTail()) and (findIntersection(lamb, v, y, y.next) == None):
+        while (not y == K[i-1].getTail()) and (findIntersection(lamb, v, y, y.next) == None):
             #print("y:\n", y)
             y = y.next
 
         wdprime = None
-        if (not y == K[i].getTail()):
+        if (not y == K[i-1].getTail()):
             wdprime = Node(findIntersection(lamb, v, y, y.next))
-        K.append(K[i])
+        K.append(K[i-1])
         x, y = x.prev, y.next
-        head, tail = K[i+1].head, K[i+1].tail
+        head, tail = K[i].head, K[i].tail
 
         if not (wdprime == None):
             wprime.next = wdprime
@@ -248,7 +249,7 @@ def _convex(i, P, K, F, L):
             wprime.prev = x
             wprime.next = lamb
             lamb.prev = wprime
-            K[i+1].tail = lamb
+            K[i].tail = lamb
 
         else:
         # Flip else case from reflex (on line 103 to 116)
@@ -258,8 +259,8 @@ def _convex(i, P, K, F, L):
                 z = z.next
             wdprime = Node(findIntersection(z.next, z, Node(P[i]), Node(P[i+1])))
             z = z.next
-            K[i+1].tail = wprime
-            K[i+1].head = wdprime
+            K[i].tail = wprime
+            K[i].head = wdprime
             x.next = wprime
             wprime.prev = x
             z.prev = wdprime
@@ -270,11 +271,11 @@ def _convex(i, P, K, F, L):
         if not wdprime == None:
             region = findRegion(wprime, wdprime, Node(P[i+1]))
             if region == -1:
-                # Follow reflex for F[i+1]
-                F.append(F[i])
-                #the below line has F[i+1].next being None
-                while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
-                    F[i+1] = F[i+1].next
+                # Follow reflex for F[i]
+                F.append(F[i-1])
+                #the below line has F[i].next being None
+                while F[i] != tail and ccw(P[i+1], F[i], F[i].next) == 1:
+                    F[i] = F[i].next
                 L.append(wdprime)
 
             elif region == 0:
@@ -283,46 +284,46 @@ def _convex(i, P, K, F, L):
 
             elif region == 1:
                 F.append(wprime)
-                # Follow reflex for L[i+1] except scan ccw from wdprime
+                # Follow reflex for L[i-1] except scan ccw from wdprime
                 L.append(wdprime)
                 X = wdprime.next
                 while(ccw(P[i+1], X, X.next) == -1 and X != wdprime):
                     X = X.next
-                if X != L[i]:
-                    L[i+1] = X
+                if X != L[i-1]:
+                    L[i-1] = X
 
         else:
             region = findRegion(v, wprime, Node(P[i+1]))
             if region == 0:
-                # Follow reflex for F[i+1]
-                F.append(F[i])
-                while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
-                    F[i+1] = F[i+1].next
+                # Follow reflex for F[i]
+                F.append(F[i-1])
+                while(ccw(P[i+1], F[i], F[i].next) == 1):
+                    F[i] = F[i].next
 
             elif region == 1:
                 F.append(wprime)
             L.append(lamb)
 
     else:
-        K.append(K[i])
-        # Follow reflex for F[i+1]
-        F.append(F[i])
-        #print("F[" + str(i) + "]:\n", F[i])
-        while(ccw(P[i+1], F[i+1], F[i+1].next) == 1):
-            #print(type(F[i]))
-            F[i+1] = F[i+1].next
+        K.append(K[i-1])
+        # Follow reflex for F[i]
+        F.append(F[i-1])
+        #print("F[" + str(i) + "]:\n", F[i-1])
+        while(ccw(P[i+1], F[i], F[i].next) == 1):
+            #print(type(F[i-1]))
+            F[i] = F[i].next
 
-        if type(K[i+1].head) == Lambda:
-            L.append(L[i])
+        if type(K[i].head) == Lambda:
+            L.append(L[i-1])
 
         else:
-            # Follow reflex for L[i+1]
-            L.append(L[i])
-            X = L[i].next
-            while(ccw(P[i+1], X, X.next) == -1 and X != L[i]):
+            # Follow reflex for L[i-1]
+            L.append(L[i-1])
+            X = L[i-1].next
+            while(ccw(P[i+1], X, X.next) == -1 and X != L[i-1]):
                 X = X.next
-            if X != L[i]:
-                L[i+1] = X
+            if X != L[i-1]:
+                L[i-1] = X
 
     return 1
 
@@ -465,7 +466,7 @@ def JeffsAlgorithm(K):
                 intersection = findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node.prev, cur_node)
 
                 if intersection != None:
-                    int_dct_F[i] = Node(intersection)
+                    int_dct_F[i-1] = Node(intersection)
 
             cur_node = cur_node.prev
 
