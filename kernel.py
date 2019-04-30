@@ -325,7 +325,7 @@ def _convex(i, P, K, F, L):
 
     return 1
 
-
+'''
 def JeffsAlgorithm(K):
     # Construct the Polygon
     vertices_array = []
@@ -402,6 +402,8 @@ def JeffsAlgorithm(K):
     else:
         print("JeffsAlgorithm:   Inputted kernel has one Lambda, NOT POSSIBLE")
         return None
+'''
+
 
 def JeffsAlgorithm(K):
 
