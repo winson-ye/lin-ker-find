@@ -156,7 +156,7 @@ class StructuredPoly:
 
 	def setFlex(self):
 
-		
+
 
 		'''
 		Get an oriented list of vertices that will show me which way to walk around the polygon
@@ -388,12 +388,10 @@ def findIntersection(v1, v2, u1, u2):
 
 	# If v1 and v2 are both Lambdas
 	elif ((type(v1) == Lambda) and (type(v2) == Lambda)):
-		print("findIntersect:	BOTH v1 AND v2 ARE LAMBDAS. UNDEFINIED BEHAVIOR.")
-		return None
+		raise ValueError("findIntersect:	BOTH v1 AND v2 ARE LAMBDAS. UNDEFINIED BEHAVIOR.")
 
 	else:
-		# print("findIntersect:	YOU REALLY GOOFED IN INPUTTING v1 AND v2")
-		return None
+		raise ValueError("findIntersect:	YOU REALLY GOOFED IN INPUTTING v1 AND v2")
 
 
 	### Handle the inputs u1 and u2 and determine if they denote a line segment or ray
@@ -426,12 +424,11 @@ def findIntersection(v1, v2, u1, u2):
 
 	# If u1 and u2 are both Lamdas
 	elif ((type(u1) == Lambda) and (type(u2) == Lambda)):
-		print("findIntersect:	BOTH u1 AND u2 ARE LAMBDAS. UNDEFINIED BEHAVIOR.")
-		return None
+		raise ValueError("findIntersect:	BOTH u1 AND u2 ARE LAMBDAS. UNDEFINIED BEHAVIOR.")
 
 	else:
 		# print("findIntersect:	YOU REALLY GOOFED IN INPUTTING u1 AND u2")
-		raise ValueError('A very specific bad thing happened')
+		raise ValueError('findIntersect:	YOU REALLY GOOFED IN INPUTTING u1 AND u2')
 
 
 	### Compute intersection
@@ -475,7 +472,7 @@ def findIntersection(v1, v2, u1, u2):
 			return intersection
 
 	#print("Final return")
-	return None
+	raise ValueError("findIntersection: YOU DONE GOOFED")
 
 
 def slope(v1, v2):
