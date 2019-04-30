@@ -127,27 +127,27 @@ class K:
 
 	def setTail(self, tail):
 		tail.prev = self.tail
-        tail.next = None
+		tail.next = None
 
-        if not self.tail == None:
-            self.tail.next = head
+		if not self.tail == None:
+			self.tail.next = head
 
 		self.tail = tail
 		return
 
-    def addNode(self, before, node, after):
-        if before == None:
-            self.setHead(node)
-        else:
-            before.next = node
-            node.prev = before
+	def addNode(self, before, node, after):
+		if before == None:
+			self.setHead(node)
+		else:
+			before.next = node
+			node.prev = before
 
-        if after == None:
-            self.setTail(node)
-        else:
-            after.prev = node
-            node.next = after
-        return
+		if after == None:
+			self.setTail(node)
+		else:
+			after.prev = node
+			node.next = after
+		return
 
 	def getHead(self):
 		return self.head
