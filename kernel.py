@@ -408,6 +408,8 @@ def JeffsAlgorithm(K):
 
 def JeffsAlgorithm(K):
 
+    pdb.set_trace()
+
     if type(K.head) == Lambda and type(K.tail) == Lambda:
 
         cur_node, int_dct_H, t_dct = K.head, dict(), dict()
@@ -456,7 +458,7 @@ def JeffsAlgorithm(K):
 
         cur_node, int_dct_F, t_dct = K.tail, dict(), dict()
         bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[1], YLIM[0]))]
-        pdb.set_trace()
+
         while cur_node != K.head and not int_dct_F:
             for i in range(4):
                 intersection = Node(findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node.prev, cur_node))
