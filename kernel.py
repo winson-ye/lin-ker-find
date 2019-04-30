@@ -413,18 +413,19 @@ def JeffsAlgorithm(K):
     if type(K.head) == Lambda and type(K.tail) == Lambda:
 
         cur_node, int_dct_H, t_dct = K.head, dict(), dict()
-        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[1], YLIM[0]))]
+        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[0], YLIM[1]))]
+        pdb.set_trace
         while cur_node != K.tail and not int_dct_H:
             for i in range(4):
-                intersection = Node(findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node, cur_node.next))
+                intersection = findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node, cur_node.next)
 
-                if intersection.coords != None:
-                    int_dct_H[i] = intersection
+                if intersection != None:
+                    int_dct_H[i] = Node(intersection)
 
             cur_node = cur_node.next
 
-        cur_node = cur_node.prev
         first_node = cur_node
+        cur_node = cur_node.prev
         print(int_dct_H)
         if not int_dct_H:
             #pdb.set_trace()
@@ -457,21 +458,21 @@ def JeffsAlgorithm(K):
 
 
         cur_node, int_dct_F, t_dct = K.tail, dict(), dict()
-        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[1], YLIM[0]))]
+        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[0], YLIM[1]))]
 
         while cur_node != K.head and not int_dct_F:
             for i in range(4):
-                intersection = Node(findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node.prev, cur_node))
+                intersection = findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node.prev, cur_node)
 
-                if intersection.coords != None:
-                    int_dct_F[i] = intersection
+                if intersection != None:
+                    int_dct_F[i] = Node(intersection)
 
             cur_node = cur_node.prev
 
-        cur_node = cur_node.next
         last_node = cur_node
+        cur_node = cur_node.next
 
-        pdb.set_trace()
+        #pdb.set_trace()
         if not int_dct_F:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
@@ -516,15 +517,15 @@ def JeffsAlgorithm(K):
         pdb.set_trace()
 
 
-        pt_lst, cur_node = [], first_node
+        pt_lst, cur_node = [head_intersect.coords], first_node
         while cur_node != last_node:
             pt_lst.append(cur_node.coords)
             cur_node = cur_node.next
         pt_lst.append(last_node.coords)
-        while ccw(first_node, last_node, bounding_box_corners[corner_index % 4]) == 1:
+        pt_lst.append(tail_intersect.coords)
+        while ccw(head_intersect, tail_intersect, bounding_box_corners[corner_index % 4]) == 1:
             pt_lst.append(bounding_box_corners[corner_index % 4].coords)
             corner_index += 1
-        pt_lst.append(first_node.coords)
         pt_lst.append(pt_lst[0])
 
         return Polygon(pt_lst)
@@ -586,7 +587,7 @@ def main():
     #print("ccw", ccw((2, 4), (2, 6), (10, 8)))
     L1 = Lambda((-1, -1))
     L2 = Lambda((1, -1))
-    N = Node((-20, 50))
+    N = Node((100, 50))
     L1.next = N; N.prev = L1
     N.next = L2; L2.prev = N
     k = K(L1, L2)
@@ -595,18 +596,19 @@ def main():
         print(h)
         h = h.next
     print(h)
-    I1 = Node(findIntersection(L1, N, Node((0, 0)), Node((0, 100))))
-    I2 = Node(findIntersection(L1, N, Node((0, 100)), Node((100, 100))))
-    print(I1)
-    print(I2)
+    #I1 = Node(findIntersection(L1, N, Node((0, 0)), Node((0, 100))))
+    #I2 = Node(findIntersection(L1, N, Node((0, 100)), Node((100, 100))))
+    #print(I1)
+    #print(I2)
     #pdb.set_trace()
-    print((I1[0]-N[0])/-L1[0])
+    #print((I1[0]-N[0])/-L1[0])
+    #print(findIntersection(Node((0, 0)), Node((0, 100)), L1, N))
     P = JeffsAlgorithm(k)
     print(P.get_xy())
-    plotA(ax, P, N, N, 1)
+    #plotA(ax, P, N, N, 1)
 
-    plt.ion()
-    plt.show()
+    #plt.ion()
+    #plt.show()
 
     #q = getKernel(P)
     #print(q.get_xy())
