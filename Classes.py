@@ -25,7 +25,7 @@ class __BasicNode:
 
 
 class Node(__BasicNode):
-	def __init__(self, coords = None):
+	def __init__(self, coords):
 		super().__init__();
 		self.coords = coords
 
@@ -56,7 +56,7 @@ class Node(__BasicNode):
 
 
 class Lambda(__BasicNode):
-	def __init__(self, direction = None):
+	def __init__(self, direction):
 		super().__init__()
 		self.direction = direction
 
@@ -101,7 +101,7 @@ class Lambda(__BasicNode):
 
 
 class K:
-	def __init__(self, head = None, tail = None):
+	def __init__(self, head, tail):
 		self.head = head
 		self.tail = tail
 
