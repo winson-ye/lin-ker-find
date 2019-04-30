@@ -421,15 +421,19 @@ def JeffsAlgorithm(K):
             cur_node = cur_node.next
 
         first_node = cur_node
+        print(int_dct_H)
         if not int_dct_H:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
-        for key, value in int_dct_H:
+        for key, value in int_dct_H.items():
             if cur_node == K.head:
                 if cur_node[0] == 0:
-                    t_dct[key] = (value[1] - cur_node.next[1]) / cur_node[1]
+                    t_dct[key] = (value[1] - cur_node.next[1]) / (-cur_node[1])
                 else:
-                    t_dct[key] = (value[0] - cur_node.next[0]) / cur_node[0]
+                    t_dct[key] = (value[0] - cur_node.next[0]) / (-cur_node[0])
+
+            elif cur_node == K.tail:
+                return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
             else:
                 if cur_node[0] == 0:
@@ -460,7 +464,7 @@ def JeffsAlgorithm(K):
         if not int_dct_F:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
 
-        for key, value in int_dct_F:
+        for key, value in int_dct_F.items():
             if cur_node == K.tail:
                 if cur_node[0] == 0:
                     t_dct[key] = (value[1] - cur_node.next[1]) / cur_node[1]
@@ -566,12 +570,30 @@ def main():
     '''
 
     #print("ccw", ccw((2, 4), (2, 6), (10, 8)))
+    L1 = Lambda((-1, -1))
+    L2 = Lambda((1, -1))
+    N = Node((-20, 50))
+    L1.next = N; N.prev = L1
+    N.next = L2; L2.prev = N
+    k = K(L1, L2)
+    h = k.head
+    while h != k.tail:
+        print(h)
+        h = h.next
+    print(h)
+    I1 = Node(findIntersection(L1, N, Node((0, 0)), Node((0, 100))))
+    I2 = Node(findIntersection(L1, N, Node((0, 100)), Node((100, 100))))
+    print(I1)
+    print(I2)
+    print((I1[0]-N[0])/-L1[0])
+    plotA(ax, JeffsAlgorithm(k), N, N, 1)
 
     plt.ion()
     plt.show()
 
-    q = getKernel(P)
+    #q = getKernel(P)
     #print(q.get_xy())
+
 
     '''
     fig = plt.figure()
