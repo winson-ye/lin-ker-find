@@ -4,6 +4,8 @@ import math
 from matplotlib.widgets import Button
 import pdb
 
+XLIM = [0, 100]
+YLIM = [0, 100]
 
 class __BasicNode:
     def __init__(self):
@@ -715,7 +717,7 @@ def JeffsAlgorithm(K):
         print(int_dct_H)
         if not int_dct_H:
             ##pdb.set_trace()
-            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+            return (Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)]), -1)
 
         for key, value in int_dct_H.items():
             if cur_node == K.head:
@@ -726,7 +728,7 @@ def JeffsAlgorithm(K):
 
             elif cur_node == K.tail:
                 ##pdb.set_trace()
-                return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+                return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)], -1)
 
             else:
                 ##pdb.set_trace()
@@ -760,7 +762,7 @@ def JeffsAlgorithm(K):
 
         ##pdb.set_trace()
         if not int_dct_F:
-            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)], -1)
 
         for key, value in int_dct_F.items():
             if cur_node == K.tail:
@@ -785,7 +787,7 @@ def JeffsAlgorithm(K):
         #pdb.set_trace()
 
         if head_intersect.coords == tail_intersect.coords:
-            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)], -1)
 
 
         corner_index = 0
@@ -814,7 +816,7 @@ def JeffsAlgorithm(K):
             corner_index += 1
         pt_lst.append(pt_lst[0])
 
-        return Polygon(pt_lst)
+        return (Polygon(pt_lst), 1)
 
 
     elif type(K.head) != Lambda and type(K.tail) != Lambda:
@@ -828,7 +830,7 @@ def JeffsAlgorithm(K):
         bounded_polygon_list.append((K.tail[0], K.tail[1]))
         bounded_polygon_list.append((K.head[0], K.head[1]))
 
-        return Polygon(bounded_polygon_list)
+        return (Polygon(bounded_polygon_list), 1)
 
     else:
         raise ValueError("JeffsAlgorithm:\tGiven a Kernel with a single Lambda")
