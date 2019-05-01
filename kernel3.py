@@ -91,7 +91,7 @@ def getKernel(P):
         P.L = tail_lambda
         #return P.k
 
-        plotA(ax, JeffsAlgorithm(P.K), P.F, P.L, 1, P.polygon)
+        plotA(ax, JeffsAlgorithm(P.K), P.F, P.L, 1, P.polygon, P.K.head, P.K.tail)
 
     else:
         ax.set_title("Kernel is the convex polygon!")
@@ -107,7 +107,7 @@ def getKernel(P):
         if result == -1:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)]).get_xy()
 
-        plotA(ax, JeffsAlgorithm(P.K), P.F, P.L, i+1, P.polygon)
+        plotA(ax, JeffsAlgorithm(P.K), P.F, P.L, i+1, P.polygon, P.K.head, P.K.tail)
 
     return P.K #JeffsAlgorithm(ker[len(poly) - 2])
 

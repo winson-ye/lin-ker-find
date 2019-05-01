@@ -436,6 +436,8 @@ def ccw(a, b, c):
 
 
 def findIntersection(v1, v2, u1, u2):
+
+
     p1 = p2 = q1 = q2 = None
     v1_v2_is_ray = False
     u1_u2_is_ray = False
@@ -664,7 +666,7 @@ def findRegion(wprime, wdprime, v_iplus1):
         else:
             print("findRegion:  square_l2_norm_ratio is negative when that's impossible")
 
-def plotA(ax, ker_tup, F, L, i, shape):
+def plotA(ax, ker_tup, F, L, i, shape, head, tail):
     if type(ker_tup) != tuple:
         raise TypeError(ker_tup)
 
@@ -685,10 +687,16 @@ def plotA(ax, ker_tup, F, L, i, shape):
     ax.set_title("drawing K" + str(i))
 
     if type(F) != Lambda:
-        ax.plot(F.coords[0], F.coords[1], marker='o', label='F[' + str(i) + ']', markersize=14)
+        ax.plot(F.coords[0], F.coords[1], marker='d', label='F[' + str(i) + ']', color='r')
 
     if type(L) != Lambda:
-        ax.plot(L.coords[0], L.coords[1], marker='o', label='L[' + str(i) + ']', markersize=14)
+        ax.plot(L.coords[0], L.coords[1], marker='d', label='L[' + str(i) + ']', color='k')
+
+    if type(head) != Lambda:
+        ax.plot(head.coords[0], head.coords[1], marker=8, label='H[' + str(i) + ']')
+
+    if type(tail) != Lambda:
+        ax.plot(head.coords[0], head.coords[1], marker=9, label='T[' + str(i) + ']')
 
     ax.legend(loc='upper left')
 
