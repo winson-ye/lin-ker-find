@@ -24,7 +24,12 @@ ax = fig.add_subplot(111)
 
 
 def getInputPoly():
+    plt.ion()
+    plt.show()
+
     ax.set_title('click done to create your polygon')
+    ax.set_xlim(XLIM)
+    ax.set_ylim(YLIM)
     plt.subplots_adjust(bottom=0.2)
 
     axdone = plt.axes([0.81, 0.05, 0.1, 0.075])
@@ -33,11 +38,23 @@ def getInputPoly():
     line, = ax.plot([], [], marker = 'o')
     linebuilder = LineBuilder(line)
     bdone.on_clicked(linebuilder._finish)
-    plt.show()
+
+    input("Press [enter] to finalize polygon.\n")
+
+    ax.cla()
+    ax.set_xlim(XLIM)
+    ax.set_ylim(YLIM)
 
     lst = []
     for x,y in zip(linebuilder.xs, linebuilder.ys):
         lst.append((x, y))
+
+    p = Polygon(lst)
+
+    ax.add_patch(p)
+
+    input("Press [enter] to continue.\n")
+
     return StructuredPoly(lst)
 
 
@@ -82,9 +99,10 @@ def getKernel(P):
             result = _reflex(i, P)
         elif angle[poly[i]] == 1:
             result = _convex(i, P)
-
         if result == -1:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)]).get_xy()
+
+            #plotA(ax, JeffsAlgorithm(P.K), P.F, P.L, i, P.polygon)
 
     return P.K #JeffsAlgorithm(ker[len(poly) - 2])
 
@@ -279,17 +297,14 @@ def _convex(i, StrP):
 
         return 1
 
-
-
-
 def main():
-    #P = getInputPoly()
-    '''
-    print(Q._pts)
-    print(Q.polygon.get_xy())
-    print(Q.flex_dictionary)
-    '''
-    print(getKernel(P))
+
+    #shape = getInputPoly()
+    #getKernel(shape)
+
+    #print(getKernel(P))
+
+
 
 
 if __name__ == '__main__':

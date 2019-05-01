@@ -309,7 +309,6 @@ class StructuredPoly:
 
         return flexes
 
-
     def orientVert(self, list_of_vertices):
         '''
         This is essentially Keegan's proposed algorithm.
@@ -662,6 +661,178 @@ def findRegion(wprime, wdprime, v_iplus1):
 
         else:
             print("findRegion:  square_l2_norm_ratio is negative when that's impossible")
+
+def plotA(ax, ker_tup, F, L, i, shape):
+    if type(ker_tup) != tuple:
+        raise TypeError(ker_tup)
+
+    k = ker_tup[0]
+
+    if ker_tup[1] == -1:
+        k = ker_tup[0].set_visible(False)
+
+    ax.cla()
+    ax.set_xlim(XLIM)
+    ax.set_ylim(YLIM)
+    k.set_alpha(0.3)
+    k.set_color('r')
+    
+    ax.add_patch(shape)
+    ax.add_patch(k)
+    
+    ax.set_title("drawing K" + str(i))
+
+    if type(F) != Lambda:
+        ax.plot(F.coords[0], F.coords[1], marker='o', label='F[' + str(i) + ']', markersize=14)
+
+    if type(L) != Lambda:
+        ax.plot(L.coords[0], L.coords[1], marker='o', label='L[' + str(i) + ']', markersize=14)
+
+    ax.legend(loc='upper left')
+
+    input("Press [enter] to continue.")
+
+def JeffsAlgorithm(K):
+
+    #pdb.set_trace()
+
+    if type(K.head) == Lambda and type(K.tail) == Lambda:
+
+        cur_node, int_dct_H, t_dct = K.head, dict(), dict()
+        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[0], YLIM[1]))]
+        #pdb.set_trace
+        while cur_node != K.tail and not int_dct_H:
+            for i in range(4):
+                intersection = findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node, cur_node.next)
+
+                if intersection != None:
+                    int_dct_H[i] = Node(intersection)
+
+            cur_node = cur_node.next
+
+        first_node = cur_node
+        cur_node = cur_node.prev
+        print(int_dct_H)
+        if not int_dct_H:
+            ##pdb.set_trace()
+            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+
+        for key, value in int_dct_H.items():
+            if cur_node == K.head:
+                if cur_node[0] == 0:
+                    t_dct[key] = (value[1] - cur_node.next[1]) / (-cur_node[1])
+                else:
+                    t_dct[key] = (value[0] - cur_node.next[0]) / (-cur_node[0])
+
+            elif cur_node == K.tail:
+                ##pdb.set_trace()
+                return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+
+            else:
+                ##pdb.set_trace()
+                if cur_node[0] == 0:
+                    t_dct[key] = (value[1] - cur_node.next[1]) / (cur_node[1] - cur_node.next[1])
+                else:
+                    t_dct[key] = (value[0] - cur_node.next[0]) / (cur_node[0] - cur_node.next[0])
+
+        m = max(t_dct.values())
+        for key in t_dct.keys():
+            if t_dct[key] == m:
+                k = key
+                break
+        head_intersect = int_dct_H[k]
+
+
+        cur_node, int_dct_F, t_dct = K.tail, dict(), dict()
+        bounding_box_corners = [Node((XLIM[0], YLIM[0])), Node((XLIM[1], YLIM[0])), Node((XLIM[1], YLIM[1])), Node((XLIM[0], YLIM[1]))]
+
+        while cur_node != K.head and not int_dct_F:
+            for i in range(4):
+                intersection = findIntersection(bounding_box_corners[i % 4], bounding_box_corners[(i+1) % 4], cur_node.prev, cur_node)
+
+                if intersection != None:
+                    int_dct_F[i-1] = Node(intersection)
+
+            cur_node = cur_node.prev
+
+        last_node = cur_node
+        cur_node = cur_node.next
+
+        ##pdb.set_trace()
+        if not int_dct_F:
+            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+
+        for key, value in int_dct_F.items():
+            if cur_node == K.tail:
+                if cur_node[0] == 0:
+                    t_dct[key] = (value[1] - cur_node.prev[1]) / cur_node[1]
+                else:
+                    t_dct[key] = (value[0] - cur_node.prev[0]) / cur_node[0]
+
+            else:
+                if cur_node[0] == 0:
+                    t_dct[key] = (value[1] - cur_node.prev[1]) / (cur_node[1] - cur_node.prev[1])
+                else:
+                    t_dct[key] = (value[0] - cur_node.prev[0]) / (cur_node[0] - cur_node.prev[0])
+
+        m = max(t_dct.values())
+        for key in t_dct.keys():
+            if t_dct[key] == m:
+                k = key
+                break
+        tail_intersect = int_dct_F[k]
+
+        #pdb.set_trace()
+
+        if head_intersect.coords == tail_intersect.coords:
+            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+
+
+        corner_index = 0
+        if tail_intersect[0] == 0:
+            corner_index = 0
+
+        elif tail_intersect[1] == 0:
+            corner_index = 1
+
+        elif tail_intersect[0] == 100:
+            corner_index = 2
+
+        elif tail_intersect[1] == 100:
+            corner_index = 3
+        #pdb.set_trace()
+
+
+        pt_lst, cur_node = [head_intersect.coords], first_node
+        while cur_node != last_node:
+            pt_lst.append(cur_node.coords)
+            cur_node = cur_node.next
+        pt_lst.append(last_node.coords)
+        pt_lst.append(tail_intersect.coords)
+        while ccw(head_intersect, tail_intersect, bounding_box_corners[corner_index % 4]) == 1:
+            pt_lst.append(bounding_box_corners[corner_index % 4].coords)
+            corner_index += 1
+        pt_lst.append(pt_lst[0])
+
+        return Polygon(pt_lst)
+
+
+    elif type(K.head) != Lambda and type(K.tail) != Lambda:
+        bounded_polygon_list = []
+
+        cur_node = K.head
+        while cur_node != K.tail:
+            bounded_polygon_list.append((cur_node[0], cur_node[1]))
+            cur_node = cur_node.next
+
+        bounded_polygon_list.append((K.tail[0], K.tail[1]))
+        bounded_polygon_list.append((K.head[0], K.head[1]))
+
+        return Polygon(bounded_polygon_list)
+
+    else:
+        raise ValueError("JeffsAlgorithm:\tGiven a Kernel with a single Lambda")
+
 
 
 
