@@ -11,7 +11,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 #winson chomper
-#P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
+P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 
 #chomper
 #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
@@ -24,41 +24,55 @@ ax = fig.add_subplot(111)
 
 
 
-def getInputPoly():
-    plt.ion()
-    plt.show()
+def getInputPoly(mode, P = None):
 
-    ax.set_title('click done to create your polygon')
-    ax.set_xlim(XLIM)
-    ax.set_ylim(YLIM)
-    plt.subplots_adjust(bottom=0.2)
+    if mode == 0:
 
-    axdone = plt.axes([0.81, 0.05, 0.1, 0.075])
-    bdone = Button(axdone, 'Done')
+        plt.ion()
+        plt.show()
 
-    line, = ax.plot([], [], marker = 'o')
-    linebuilder = LineBuilder(line)
-    bdone.on_clicked(linebuilder._finish)
+        ax.set_title('click done to create your polygon')
+        ax.set_xlim(XLIM)
+        ax.set_ylim(YLIM)
+        plt.subplots_adjust(bottom=0.2)
 
-    input("Press [enter] to finalize polygon.\n")
+        axdone = plt.axes([0.81, 0.05, 0.1, 0.075])
+        bdone = Button(axdone, 'Done')
 
-    ax.cla()
-    ax.set_xlim(XLIM)
-    ax.set_ylim(YLIM)
+        line, = ax.plot([], [], marker = 'o')
+        linebuilder = LineBuilder(line)
+        bdone.on_clicked(linebuilder._finish)
 
-    lst = []
-    for x,y in zip(linebuilder.xs, linebuilder.ys):
-        lst.append((x, y))
+        input("Press [enter] to finalize polygon.\n")
 
-    p = Polygon(lst)
+        ax.cla()
+        ax.set_xlim(XLIM)
+        ax.set_ylim(YLIM)
 
-    ax.add_patch(p)
+        lst = []
+        for x,y in zip(linebuilder.xs, linebuilder.ys):
+            lst.append((x, y))
 
-    input("Press [enter] to continue.\n")
+        p = Polygon(lst)
 
-    return StructuredPoly(lst)
+        ax.add_patch(p)
 
+        input("Press [enter] to continue.\n")
 
+        return StructuredPoly(lst)
+
+    else:
+
+        plt.ion()
+        plt.show()
+
+        ax.set_xlim(XLIM)
+        ax.set_ylim(YLIM)
+
+        ax.add_patch(P.polygon)
+        input("Press [enter] to continue.\n")
+
+        return P
 
 
 def getKernel(P):
@@ -304,7 +318,7 @@ def _convex(i, StrP):
 
 def main():
 
-    shape = getInputPoly()
+    shape = getInputPoly(1, P)
     getKernel(shape)
 
     #print(getKernel(P))
