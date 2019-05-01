@@ -125,6 +125,23 @@ class K:
 	def getTail(self):
 		return self.tail
 
+	def __str__(self):
+		cur_node = self.head
+
+		bound = "-----------------------\n"
+		message = bound
+
+		while cur_node != self.tail:
+			message += cur_node.__str__()
+
+			cur_node = cur_node.next
+
+		message += cur_node.__str__()
+
+		message += bound
+
+		return message
+
 class LineBuilder:
     def __init__(self, line):
         self.line = line
@@ -153,11 +170,11 @@ class LineBuilder:
 class StructuredPoly:
 	def __init__(self, list_of_vertices = []):
 		self._pts = self.orientVert(list_of_vertices)
-		self.k_list = list()
+		self.kernel = None
 		self.flex_dictionary = self.setFlex()
 		self.polygon = Polygon(self._pts)
-		self.F_list = list()
-		self.L_list = list()
+		self.F = None 
+		self.L = None
 
 
 	def setFlex(self):
@@ -483,7 +500,7 @@ def findIntersection(v1, v2, u1, u2):
 	#print("Final return")
 	#raise ValueError("findIntersection: YOU DONE GOOFED")
 
-def move(start, direction)
+def move(start, direction):
 	
 	if type(direction) == Node:
 		return direction
