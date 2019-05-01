@@ -91,17 +91,17 @@ def getKernel(P):
 
 
 
-def _reflex(i, P, K, F, L):
-    P = [tuple(x) for x in P.polygon.get_xy()]
+def _reflex(i, StrP):
+    P = [tuple(x) for x in StrP.polygon.get_xy()]
 
     edge = (P[i+1][0] - P[i][0], P[i+1][1] - P[i][1])
     new_vertex = Node(P[i+1])
     new_lambda = Lambda(edge)
     new_lambda.next, new_vertex.prev = new_vertex, new_lambda
 
-    if ccw(new_vertex, move(new_vertex, F), new_lambda) != -1:
-        pointer1, K_edge_int = F, None
-        while pointer1 != L and K_edge_int == None:
+    if ccw(new_vertex, move(new_vertex, StrP.F), new_lambda) != -1:
+        pointer1, K_edge_int = StrP.F, None
+        while pointer1 != StrP.L and K_edge_int == None:
             K_edge_int = findIntersection(pointer1, pointer1.next, new_lambda, new_vertex)
             pointer1 = pointer1.next
 
@@ -110,56 +110,56 @@ def _reflex(i, P, K, F, L):
 
         wprime = Node(K_edge_int)
 
-        pointer2, K_edge_int = F, None
+        pointer2, K_edge_int = StrP.F, None
         while pointer2 != K.getHead() and K_edge_int == None:
             K_edge_int = findIntersection(pointer2.prev, pointer2, new_lambda, new_vertex)
             pointer2 = pointer2.prev
 
         pdb.set_trace()
-        H_slope, T_slope = slope(K.head, K.head.next), slope(K.tail.prev, K.tail)
+        H_slope, T_slope = slope(K.head, K.head.next), slope(StrP.K.tail.prev, StrP.K.tail)
         edge_slope = slope(new_lambda, new_vertex)
         if K_edge_int != None:
             wdprime = Node(K_edge_int)
-            K.addNode(pointer2, wdprime, pointer1)
-            K.addNode(wdprime, wprime, pointer1)
+            StrP.K.addNode(pointer2, wdprime, pointer1)
+            StrP.K.addNode(wdprime, wprime, pointer1)
 
         elif dot((-K.tail[0], -K.tail[1]), new_lambda) >= 0 and dot(new_lambda, K.head) >= 0:
-            K.addNode(pointer2, wprime, pointer1)
-            K.addNode(None, new_lambda, wprime)
+            StrP.K.addNode(pointer2, wprime, pointer1)
+            StrP.K.addNode(None, new_lambda, wprime)
             wdprime = None
 
         else:
-            pointer3, K_edge_int = K.tail, None
+            pointer3, K_edge_int = StrP.K.tail, None
             while K_edge_int != None:
                 K_edge_int = findIntersection(pointer3.prev, pointer3, new_lambda, new_vertex)
                 pointer3 = pointer3.prev
 
             wdprime = Node(K_edge_int)
-            K.addNode(pointer3, wdprime, pointer1)
-            K.addNode(wdprime, wprime, pointer1)
-            K.setHead(wprime)
-            K.setTail(wdprime)
-            K.makeCircular()
+            StrP.K.addNode(pointer3, wdprime, pointer1)
+            StrP.K.addNode(wdprime, wprime, pointer1)
+            StrP.K.setHead(wprime)
+            StrP.K.setTail(wdprime)
+            StrP.K.makeCircular()
 
         if wdprime == None:
-            F = new_lambda
+            StrP.F = new_lambda
         else:
-            F = wdprime
+            StrP.F = wdprime
 
     else:
-        pointer4 = F
+        pointer4 = StrP.F
         F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
         while F_pt_order == 1:
             F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
             pointer4 = pointer4.next
-        F = pointer4
+        StrP.F = pointer4
 
-    pointer5, L_pt_order = L, 0
-    while pointer5 != K.tail and L_pt_order == -1:
+    pointer5, L_pt_order = StrP.L, 0
+    while pointer5 != StrP.K.tail and L_pt_order == -1:
         L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
         pointer5 = pointer5.next
 
-    L = pointer5
+    StrP.L = pointer5
 
     return 1
 
