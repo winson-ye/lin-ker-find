@@ -46,7 +46,7 @@ def getInputPoly():
 def getKernel(P):
     poly = [tuple(x) for x in P.polygon.get_xy()]
     angle = P.flex_dictionary
-    pdb.set_trace()
+    #pdb.set_trace()
 
     list_of_vertices = poly
     if angle[list_of_vertices[0]] == -1:
@@ -77,13 +77,14 @@ def getKernel(P):
         return poly
 
     for i in range(1, len(poly) - 2):
+        #pdb.set_trace()
         if angle[poly[i]] == -1:
             result = _reflex(i, poly, P.k, P.F, P.L)
         elif angle[poly[i]] == 1:
             result = _convex(i, poly, P.k, P.F, P.L)
 
         if result == -1:
-            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)])
+            return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)]).get_xy()
 
     return P.k #JeffsAlgorithm(ker[len(poly) - 2])
 
@@ -96,7 +97,7 @@ def _reflex(i, P, K, F, L):
     new_lambda = Lambda(edge)
     new_lambda.next, new_vertex.prev = new_vertex, new_lambda
 
-    if ccw(new_vertex, F, new_lambda) == 1:
+    if ccw(new_vertex, move(new_vertex, F), new_lambda) != -1:
         pointer1, K_edge_int = F, None
         while pointer1 != L and K_edge_int == None:
             K_edge_int = findIntersection(pointer1, pointer1.next, new_lambda, new_vertex)
@@ -108,7 +109,7 @@ def _reflex(i, P, K, F, L):
         wprime = Node(K_edge_int)
 
         pointer2, K_edge_int = F, None
-        while pointer != K.getTail() and K_edge_int == None:
+        while pointer2 != K.getHead() and K_edge_int == None:
             K_edge_int = findIntersection(pointer2.prev, pointer2, new_lambda, new_vertex)
             pointer2 = pointer2.prev
 
@@ -152,7 +153,7 @@ def _reflex(i, P, K, F, L):
         F = pointer4
 
     pointer5, L_pt_order = L, 0
-    while pointer5 != K.head and L_pt_order == -1:
+    while pointer5 != K.tail and L_pt_order == -1:
         L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
         pointer5 = pointer5.next
 
@@ -163,20 +164,111 @@ def _reflex(i, P, K, F, L):
 
 
 
-def _convex(i, P, K, F, L):
-    return 1
+def _convex(i, StrP):
+    P = [tuple(x) for x in P.polygon.get_xy()]
+
+    edge = (P[i+1][0] - P[i][0], P[i+1][1] - P[i][1])
+    new_vertex = Node(P[i])
+    new_lambda = Lambda(edge)
+    new_lambda.prev, new_vertex.next = new_vertex, new_lambda
+
+    if ccw(move(new_vertex, StrP.L), new_vertex, new_lambda) != 1:
+        pointer1, K_edge_int = L, None
+        while pointer1 != StrP.F and K_edge_int == None:
+            K_edge_int = findIntersection(pointer1.prev, pointer1, new_vertex, new_lambda)
+            pointer1 = pointer1.prev
+
+        if K_edge_int == None:
+            return -1
+
+        wprime = Node(K_edge_int)
+
+        pointer2, K_edge_int = L, None
+        while pointer2 != K.tail and K_edge_int == None:
+            K_edge_int = findIntersection(pointer2, pointer2.next, new_vertex, new_lambda)
+            pointer2 = pointer2.next
+
+        H_slope, T_slope = slope(K.head, K.head.next), slope(K.tail.prev, K.tail)
+        edge_slope = slope(new_vertex, new_lambda)
+        if K_edge_int != None:
+            wdprime = Node(K_edge_int)
+            K.addNode(pointer1, wprime, pointer1.next)
+            K.addNode(wprime, wdprime, pointer2)
+
+        elif dot(K.tail, new_lambda) >= 0 and dot(new_lambda, (-K.head[0], -K.head[1])) >= 0:
+            K.addNode(pointer1, wprime, pointer1.next)
+            K.addNode(wprime, new_lambda, None)
+            wdprime = None
+
+        else:
+            pointer3, K_edge_int = K.head, None
+            while K_edge_int == None:
+                K_edge_int = findIntersection(pointer3, pointer3.next, new_vertex, new_lambda)
+                pointer3 = pointer3.next
+
+            wdprime = Node(K_edge_int)
+            K.addNode(pointer1, wprime, pointer1.next)
+            K.addNode(pointer3.prev, wdprime, pointer3)
+            K.setHead(wdprime)
+            K.setTail(wprime)
+            K.makeCircular()
+
+        if wdprime == None:
+            region = findRegion(new_vertex, wprime, Node(P[i+1]))
+            if region == 0:
+                L = new_lambda
+
+                pointer4 = F
+                F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
+                while F_pt_order == 1:
+                    F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
+                    pointer4 = pointer4.next
+                F = pointer4
+
+            elif region == 1:
+                pdb.set_trace()
+                F = wprime
+                L = new_lambda
+
+        else:
+            region = findRegion(wprime, wdprime, Node(P[i+1]))
+            if region == -1:
+                L = wdprime
+
+                pointer4 = F
+                F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
+                while F_pt_order == 1:
+                    F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
+                    pointer4 = pointer4.next
+                F = pointer4
+
+            elif region == 0:
+                F = wprime
+                L = wdprime
+
+            elif region == 1:
+                F = wprime
+
+                pointer5, L_pt_order = wdprime, 0
+                while pointer5 != K.tail and L_pt_order == -1:
+                    L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
+                    pointer5 = pointer5.next
+
+                L = pointer5
+
+        return 1
 
 
 
 
 def main():
-    Q = getInputPoly()
+    #Q = getInputPoly()
     '''
     print(Q._pts)
     print(Q.polygon.get_xy())
     print(Q.flex_dictionary)
     '''
-    print(getKernel(Q))
+    print(getKernel(P))
 
 
 if __name__ == '__main__':

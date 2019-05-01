@@ -483,18 +483,18 @@ def findIntersection(v1, v2, u1, u2):
 	#print("Final return")
 	#raise ValueError("findIntersection: YOU DONE GOOFED")
 
-def move(start, direction)
-	
+def move(start, direction):
+
 	if type(direction) == Node:
 		return direction
 
 	if type(direction) == Lambda:
 
 		if direction.next == None:
-			return Node(start[0] + Lambda[0], start[1] + Lambda[1])
+			return Node((start[0] + Lambda[0], start[1] + Lambda[1]))
 
 		else:
-			return Node(start[0] - Lambda[0], start[1] - Lambda[1])
+			return Node((start[0] - Lambda[0], start[1] - Lambda[1]))
 
 def slope(v1, v2):
 	if (type(v1) == Lambda) and (type(v2) == Lambda):

@@ -41,6 +41,9 @@ class Node(__BasicNode):
 	def __getitem__(self, i):
 		return self.coords[i]
 
+	def __len__(self):
+		return len(self.coords)
+
 	def __eq__(self, other):
 		if type(other) != Node:
 			return False
@@ -74,6 +77,9 @@ class Lambda(__BasicNode):
 
 	def __getitem__(self, i):
 		return self.direction[i]
+
+	def __len__(self):
+		return len(self.direction)
 
 	def __eq__(self, other):
 		if type(other) != Lambda:
@@ -597,6 +603,20 @@ def dot(x, y):
 	return sum(x[i] * y[i] for i in range(len(x)))
 
 
+
+
+def move(start, direction):
+
+	if type(direction) == Node:
+		return direction
+
+	if type(direction) == Lambda:
+
+		if direction.next == None:
+			return Node((start[0] + direction[0], start[1] + direction[1]))
+
+		else:
+			return Node((start[0] - direction[0], start[1] - direction[1]))
 
 
 
