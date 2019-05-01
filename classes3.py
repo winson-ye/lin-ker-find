@@ -178,7 +178,7 @@ class K:
         pointer = self.head
         count = 1
         string = "\n"
-        pdb.set_trace()
+        #pdb.set_trace()
         string += "Node " + str(count) + ":\n" + str(pointer) + "\n"
         count += 1
         pointer = pointer.next

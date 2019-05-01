@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from classes2 import *
+from classes3 import *
 import pdb
 import math
 
@@ -207,7 +207,7 @@ def _convex(i, StrP):
         s = StrP.K.head[1] * new_lambda[0] - StrP.K.head[0] * new_lambda[1]
 
         if K_edge_int != None:
-            pdb.set_trace()
+            #pdb.set_trace()
             wdprime = Node(K_edge_int)
             StrP.K.addNode(pointer1, wprime, pointer1.next)
             StrP.K.addNode(wprime, wdprime, pointer2)
@@ -224,7 +224,7 @@ def _convex(i, StrP):
                 K_edge_int = findIntersection(pointer3, pointer3.next, new_vertex, new_lambda)
                 pointer3 = pointer3.next
 
-            pdb.set_trace()
+            #pdb.set_trace()
 
             wdprime = Node(K_edge_int)
             StrP.K.addNode(pointer1, wprime, wdprime)
