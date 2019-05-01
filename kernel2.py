@@ -167,7 +167,7 @@ def _reflex(i, P, K, F, L):
 
 
 def _convex(i, StrP):
-    P = [tuple(x) for x in P.polygon.get_xy()]
+    P = [tuple(x) for x in StrP.polygon.get_xy()]
 
     edge = (P[i+1][0] - P[i][0], P[i+1][1] - P[i][1])
     new_vertex = Node(P[i])
@@ -175,7 +175,7 @@ def _convex(i, StrP):
     new_lambda.prev, new_vertex.next = new_vertex, new_lambda
 
     if ccw(move(new_vertex, StrP.L), new_vertex, new_lambda) != 1:
-        pointer1, K_edge_int = L, None
+        pointer1, K_edge_int = StrP.L, None
         while pointer1 != StrP.F and K_edge_int == None:
             K_edge_int = findIntersection(pointer1.prev, pointer1, new_vertex, new_lambda)
             pointer1 = pointer1.prev
@@ -185,25 +185,25 @@ def _convex(i, StrP):
 
         wprime = Node(K_edge_int)
 
-        pointer2, K_edge_int = L, None
-        while pointer2 != K.tail and K_edge_int == None:
+        pointer2, K_edge_int = StrP.L, None
+        while pointer2 != StrP.K.tail and K_edge_int == None:
             K_edge_int = findIntersection(pointer2, pointer2.next, new_vertex, new_lambda)
             pointer2 = pointer2.next
 
-        H_slope, T_slope = slope(K.head, K.head.next), slope(K.tail.prev, K.tail)
+        H_slope, T_slope = slope(StrP.K.head, StrP.K.head.next), slope(StrP.K.tail.prev, StrP.K.tail)
         edge_slope = slope(new_vertex, new_lambda)
         if K_edge_int != None:
             wdprime = Node(K_edge_int)
             K.addNode(pointer1, wprime, pointer1.next)
             K.addNode(wprime, wdprime, pointer2)
 
-        elif dot(K.tail, new_lambda) >= 0 and dot(new_lambda, (-K.head[0], -K.head[1])) >= 0:
+        elif dot(StrP.K.tail, new_lambda) >= 0 and dot(new_lambda, (-StrP.K.head[0], -StrP.K.head[1])) >= 0:
             K.addNode(pointer1, wprime, pointer1.next)
             K.addNode(wprime, new_lambda, None)
             wdprime = None
 
         else:
-            pointer3, K_edge_int = K.head, None
+            pointer3, K_edge_int = StrP.K.head, None
             while K_edge_int == None:
                 K_edge_int = findIntersection(pointer3, pointer3.next, new_vertex, new_lambda)
                 pointer3 = pointer3.next
@@ -218,45 +218,45 @@ def _convex(i, StrP):
         if wdprime == None:
             region = findRegion(new_vertex, wprime, Node(P[i+1]))
             if region == 0:
-                L = new_lambda
+                StrP.L = new_lambda
 
-                pointer4 = F
+                pointer4 = StrP.F
                 F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
                 while F_pt_order == 1:
                     F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
                     pointer4 = pointer4.next
-                F = pointer4
+                StrP.F = pointer4
 
             elif region == 1:
                 pdb.set_trace()
-                F = wprime
-                L = new_lambda
+                StrP.F = wprime
+                StrP.L = new_lambda
 
         else:
             region = findRegion(wprime, wdprime, Node(P[i+1]))
             if region == -1:
-                L = wdprime
+                StrP.L = wdprime
 
-                pointer4 = F
+                pointer4 = StrP.F
                 F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
                 while F_pt_order == 1:
                     F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
                     pointer4 = pointer4.next
-                F = pointer4
+                StrP.F = pointer4
 
             elif region == 0:
-                F = wprime
-                L = wdprime
+                StrP.F = wprime
+                StrP.L = wdprime
 
             elif region == 1:
-                F = wprime
+                StrP.F = wprime
 
                 pointer5, L_pt_order = wdprime, 0
-                while pointer5 != K.tail and L_pt_order == -1:
+                while pointer5 != StrP.K.tail and L_pt_order == -1:
                     L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
                     pointer5 = pointer5.next
 
-                L = pointer5
+                StrP.L = pointer5
 
         return 1
 
