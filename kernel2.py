@@ -92,6 +92,8 @@ def getKernel(P):
 
 
 def _reflex(i, P, K, F, L):
+    P = [tuple(x) for x in P.polygon.get_xy()]
+
     edge = (P[i+1][0] - P[i][0], P[i+1][1] - P[i][1])
     new_vertex = Node(P[i+1])
     new_lambda = Lambda(edge)
