@@ -371,27 +371,27 @@ def findIntersection(v1, v2, u1, u2):
 		v1_v2_is_ray =  True
 
 		if type(v1) == Lambda:
-			p1 = v2.coords
+			p1 = v2
 
 			if type(v1.next) == Node:
-				p2 = (v2.coords[0] - v1.direction[0], v2.coords[1] - v1.direction[1])
+				p2 = (v2[0] - v1[0], v2[1] - v1[1])
 
 			elif type(v1.prev) == Node:
-				p2 = (v2.coords[0] + v1.direction[0], v2.coords[1] + v1.direction[1])
+				p2 = (v2[0] + v1[0], v2[1] + v1[1])
 
 		elif type(v2) == Lambda:
-			p1 = v1.coords
+			p1 = v1
 
 			if type(v2.next) == Node:
-				p2 = (v1.coords[0] - v2.direction[0], v1.coords[1] - v2.direction[1])
+				p2 = (v1[0] - v2[0], v1[1] - v2[1])
 
 			elif type(v2.prev) == Node:
-				p2 = (v1.coords[0] + v2.direction[0], v1.coords[1] + v2.direction[1])
+				p2 = (v1[0] + v2[0], v1[1] + v2[1])
 
 	# If v1 and v2 are both Nodes
 	elif ((type(v1) == Node) and (type(v2) == Node)):
-		p1 = v1.coords
-		p2 = v2.coords
+		p1 = v1
+		p2 = v2
 
 	# If v1 and v2 are both Lambdas
 	elif ((type(v1) == Lambda) and (type(v2) == Lambda)):
@@ -407,27 +407,27 @@ def findIntersection(v1, v2, u1, u2):
 		u1_u2_is_ray = True
 
 		if type(u1) == Lambda:
-			q1 = u2.coords
+			q1 = u2
 
 			if type(u1.next) == Node:
-				q2 = (u2.coords[0] - u1.direction[0], u2.coords[1] - u1.direction[1])
+				q2 = (u2[0] - u1[0], u2[1] - u1[1])
 
 			elif type(u1.prev) == Node:
-				q2 = (u2.coords[0] + u1.direction[0], u2.coords[1] + u1.direction[1])
+				q2 = (u2[0] + u1[0], u2[1] + u1[1])
 
 		elif type(u2) == Lambda:
-			q1 = u1.coords
+			q1 = u1
 
 			if type(u2.next) == Node:
-				q2 = (u1.coords[0] - u2.direction[0], u1.coords[1] - u2.direction[1])
+				q2 = (u1[0] - u2[0], u1[1] - u2[1])
 
 			elif type(u2.prev) == Node:
-				q2 = (u1.coords[0] + u2.direction[0], u1.coords[1] + u2.direction[1])
+				q2 = (u1[0] + u2[0], u1[1] + u2[1])
 
 	# If u1 and u2 are both Nodes
 	elif ((type(u1) == Node) and (type(u2) == Node)):
-		q1 = u1.coords
-		q2 = u2.coords
+		q1 = u1
+		q2 = u2
 
 	# If u1 and u2 are both Lamdas
 	elif ((type(u1) == Lambda) and (type(u2) == Lambda)):
@@ -544,8 +544,8 @@ def findRegion(wprime, wdprime, v_iplus1):
 	#	1  , t > 1
 
 
-	diff_1 = (v_iplus1.coords[0] - wprime.coords[0], v_iplus1.coords[1] - wprime.coords[1])
-	diff_2 = (wdprime.coords[0] - wprime.coords[0], wdprime.coords[1] - wprime.coords[1])
+	diff_1 = (v_iplus1[0] - wprime[0], v_iplus1[1] - wprime[1])
+	diff_2 = (wdprime[0] - wprime[0], wdprime[1] - wprime[1])
 
 	dot_product = diff_1[0] * diff_2[0] + diff_1[1] * diff_2[1]
 
