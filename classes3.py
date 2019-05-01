@@ -667,6 +667,9 @@ def findRegion(wprime, wdprime, v_iplus1):
             print("findRegion:  square_l2_norm_ratio is negative when that's impossible")
 
 def plotA(ax, ker_tup, F, L, i, shape, head, tail):
+    pdb.set_trace()
+
+
     if type(ker_tup) != tuple:
         raise TypeError(ker_tup)
 
@@ -696,7 +699,7 @@ def plotA(ax, ker_tup, F, L, i, shape, head, tail):
         ax.plot(head.coords[0], head.coords[1], marker=8, label='H[' + str(i) + ']', markersize=12, color='g')
 
     if type(tail) != Lambda:
-        ax.plot(head.coords[0], head.coords[1], marker=9, label='T[' + str(i) + ']', color='w')
+        ax.plot(tail.coords[0], tail.coords[1], marker=9, label='T[' + str(i) + ']', color='w')
 
     ax.legend(loc='upper left')
 
