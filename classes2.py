@@ -115,23 +115,30 @@ class K:
 		self.head = head
 		self.tail = tail
 
-	def setHead(self, head):
+	def addHead(self, head):
 		head.next = self.head
-        #head.prev = None
 
-        #if not self.head == None:
-        #    self.head.prev = head
+		if not self.head == None:
+			self.head.prev = head
 
 		self.head = head
 		return
 
-	def setTail(self, tail):
+	def setHead(self, head):
+		self.head = head
+		return
+
+	def addTail(self, tail):
 		tail.prev = self.tail
 		tail.next = None
 
 		if not self.tail == None:
-			self.tail.next = head
+			self.tail.next = tail
 
+		self.tail = tail
+		return
+
+	def setTail(self, tail):
 		self.tail = tail
 		return
 
@@ -149,11 +156,25 @@ class K:
 			node.next = after
 		return
 
+	def makeCircular(self):
+		self.tail.next = self.head
+		self.head.prev = self.tail
+
 	def getHead(self):
 		return self.head
 
 	def getTail(self):
 		return self.tail
+
+	def __str__(self):
+		pointer = self.head
+		count = 1
+		string = "\n"
+		while pointer != None:
+			string += "Node " + str(count) + ":\n" + str(pointer) + "\n"
+			count += 1
+			pointer = pointer.next
+		return string
 
 
 
@@ -189,11 +210,11 @@ class LineBuilder:
 class StructuredPoly:
 	def __init__(self, list_of_vertices = []):
 		self._pts = self.orientVert(list_of_vertices)
-		self.k_list = list()
+		self.k = K(None, None)
 		self.flex_dictionary = self.setFlex()
 		self.polygon = Polygon(self._pts)
-		self.F_list = list()
-		self.L_list = list()
+		self.F = None
+		self.L = None
 
 
 	def setFlex(self):
@@ -566,7 +587,14 @@ def slope(v1, v2):
 
 
 
+def edgeDirection(n1, n2):
+	return (n2[0] - n1[0], n2[1] - n1[1])
 
+
+
+
+def dot(x, y):
+	return sum(x[i] * y[i] for i in range(len(x)))
 
 
 
@@ -608,39 +636,57 @@ def findRegion(wprime, wdprime, v_iplus1):
 			print("findRegion:	square_l2_norm_ratio is negative when that's impossible")
 
 
-'''
-Class testing
-node = Node((1, 1))
-print(node.getCoords())
-node.setCoords((2, 2))
-print(node.getCoords())
 
-lam = Lambda()
-print(lam.getDirection())
-lam.setDirection(3)
-print(lam.getDirection())
+def main():
+	'''
+	Class testing
+	node = Node((1, 1))
+	print(node.getCoords())
+	node.setCoords((2, 2))
+	print(node.getCoords())
 
-
-k = K()
-poly = StructuredPoly([(0, 0), (1, 0), (0, 1)])
-'''
-
-'''
-Global functions testing
-
-#print(ccw((0, 0), [0, -1], (0, 1)))
-
-#print(findIntersection((-1, 0), (1, 0), (0, 1), (0, -1)))
-
-#print(slope(Node(1, 1), Node(2, 2)))
+	lam = Lambda()
+	print(lam.getDirection())
+	lam.setDirection(3)
+	print(lam.getDirection())
 
 
-#v1 = Node((-1, 0))
-#v2 = Node((1, 0))
-#u1 = Node((0, 1))
-#u2 = Node((0, -1))
+	k = K()
+	poly = StructuredPoly([(0, 0), (1, 0), (0, 1)])
+	'''
 
-#w1 = Lambda((-2, 0))
-#w1.prev = v2
-'''
-print(findIntersect([1, 2], [1, 4], [0, 3], [2, 3]))
+	'''
+	Global functions testing
+
+	#print(ccw((0, 0), [0, -1], (0, 1)))
+
+	#print(findIntersection((-1, 0), (1, 0), (0, 1), (0, -1)))
+
+	#print(slope(Node(1, 1), Node(2, 2)))
+
+
+	#v1 = Node((-1, 0))
+	#v2 = Node((1, 0))
+	#u1 = Node((0, 1))
+	#u2 = Node((0, -1))
+
+	#w1 = Lambda((-2, 0))
+	#w1.prev = v2
+	'''
+	#print(findIntersection(Node([1, 2]), Node([1, 4]), Node([0, 3]), Node([2, 3])))
+
+	L = Lambda((1, 0))
+	N = Node((0, 0))
+	L2 = Lambda((2, 3))
+	L.next, N.prev = N, L
+	N.next, L2.prev = L2, N
+	k = K(L, L2)
+	k.addNode(N, Node((5, 5)), L2)
+	print(k)
+	'''
+	print(findIntersection(Node((-10, 2)), Node((-10, -2)), L, N))
+	'''
+
+
+if __name__ == '__main__':
+	main()
