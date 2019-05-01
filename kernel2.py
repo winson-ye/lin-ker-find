@@ -194,12 +194,12 @@ def _convex(i, StrP):
         edge_slope = slope(new_vertex, new_lambda)
         if K_edge_int != None:
             wdprime = Node(K_edge_int)
-            K.addNode(pointer1, wprime, pointer1.next)
-            K.addNode(wprime, wdprime, pointer2)
+            StrP.K.addNode(pointer1, wprime, pointer1.next)
+            StrP.K.addNode(wprime, wdprime, pointer2)
 
         elif dot(StrP.K.tail, new_lambda) >= 0 and dot(new_lambda, (-StrP.K.head[0], -StrP.K.head[1])) >= 0:
-            K.addNode(pointer1, wprime, pointer1.next)
-            K.addNode(wprime, new_lambda, None)
+            StrP.K.addNode(pointer1, wprime, pointer1.next)
+            StrP.K.addNode(wprime, new_lambda, None)
             wdprime = None
 
         else:
@@ -209,11 +209,11 @@ def _convex(i, StrP):
                 pointer3 = pointer3.next
 
             wdprime = Node(K_edge_int)
-            K.addNode(pointer1, wprime, pointer1.next)
-            K.addNode(pointer3.prev, wdprime, pointer3)
-            K.setHead(wdprime)
-            K.setTail(wprime)
-            K.makeCircular()
+            StrP.K.addNode(pointer1, wprime, pointer1.next)
+            StrP.K.addNode(pointer3.prev, wdprime, pointer3)
+            StrP.K.setHead(wdprime)
+            StrP.K.setTail(wprime)
+            StrP.K.makeCircular()
 
         if wdprime == None:
             region = findRegion(new_vertex, wprime, Node(P[i+1]))
