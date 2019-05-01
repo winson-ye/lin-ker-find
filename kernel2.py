@@ -66,9 +66,9 @@ def getKernel(P):
         tail_lambda.prev = initial_node
         '''
 
-        P.k.addHead(head_lambda)
-        P.k.addTail(tail_lambda)
-        P.k.addNode(head_lambda, initial_node, tail_lambda)
+        P.K.addHead(head_lambda)
+        P.K.addTail(tail_lambda)
+        P.K.addNode(head_lambda, initial_node, tail_lambda)
         P.F = head_lambda
         P.L = tail_lambda
         #return P.k
@@ -79,14 +79,14 @@ def getKernel(P):
     for i in range(1, len(poly) - 2):
         #pdb.set_trace()
         if angle[poly[i]] == -1:
-            result = _reflex(i, poly, P.k, P.F, P.L)
+            result = _reflex(i, P)
         elif angle[poly[i]] == 1:
-            result = _convex(i, poly, P.k, P.F, P.L)
+            result = _convex(i, P)
 
         if result == -1:
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)]).get_xy()
 
-    return P.k #JeffsAlgorithm(ker[len(poly) - 2])
+    return P.K #JeffsAlgorithm(ker[len(poly) - 2])
 
 
 
@@ -99,7 +99,9 @@ def _reflex(i, StrP):
     new_lambda = Lambda(edge)
     new_lambda.next, new_vertex.prev = new_vertex, new_lambda
 
-    if ccw(new_vertex, move(new_vertex, StrP.F), new_lambda) != -1:
+    #pdb.set_trace()
+
+    if ccw(new_vertex, move(new_vertex, StrP.F), new_lambda) != 1:
         pointer1, K_edge_int = StrP.F, None
         while pointer1 != StrP.L and K_edge_int == None:
             K_edge_int = findIntersection(pointer1, pointer1.next, new_lambda, new_vertex)
@@ -111,21 +113,26 @@ def _reflex(i, StrP):
         wprime = Node(K_edge_int)
 
         pointer2, K_edge_int = StrP.F, None
-        while pointer2 != K.getHead() and K_edge_int == None:
+        while pointer2 != StrP.K.getHead() and K_edge_int == None:
             K_edge_int = findIntersection(pointer2.prev, pointer2, new_lambda, new_vertex)
             pointer2 = pointer2.prev
 
-        pdb.set_trace()
-        H_slope, T_slope = slope(K.head, K.head.next), slope(StrP.K.tail.prev, StrP.K.tail)
+        #pdb.set_trace()
+        H_slope, T_slope = slope(StrP.K.head, StrP.K.head.next), slope(StrP.K.tail.prev, StrP.K.tail)
         edge_slope = slope(new_lambda, new_vertex)
+        c = StrP.K.tail[0] * StrP.K.head[1] - StrP.K.head[0] * StrP.K.tail[1]
+        t = StrP.K.tail[0] * new_lambda[1] - StrP.K.tail[1] * new_lambda[0]
+        s = StrP.K.head[0] * new_lambda[1] - StrP.K.head[1] * new_lambda[0]
+
         if K_edge_int != None:
             wdprime = Node(K_edge_int)
             StrP.K.addNode(pointer2, wdprime, pointer1)
             StrP.K.addNode(wdprime, wprime, pointer1)
 
-        elif dot((-K.tail[0], -K.tail[1]), new_lambda) >= 0 and dot(new_lambda, K.head) >= 0:
+        elif c * t >= 0 and c * s >= 0:
             StrP.K.addNode(pointer2, wprime, pointer1)
             StrP.K.addNode(None, new_lambda, wprime)
+            pdb.set_trace()
             wdprime = None
 
         else:
@@ -192,14 +199,19 @@ def _convex(i, StrP):
 
         H_slope, T_slope = slope(StrP.K.head, StrP.K.head.next), slope(StrP.K.tail.prev, StrP.K.tail)
         edge_slope = slope(new_vertex, new_lambda)
+        c = StrP.K.tail[0] * StrP.K.head[1] - StrP.K.head[0] * StrP.K.tail[1]
+        t = StrP.K.tail[1] * new_lambda[0] - StrP.K.tail[0] * new_lambda[1]
+        s = StrP.K.head[1] * new_lambda[0] - StrP.K.head[0] * new_lambda[1]
+
         if K_edge_int != None:
             wdprime = Node(K_edge_int)
             StrP.K.addNode(pointer1, wprime, pointer1.next)
             StrP.K.addNode(wprime, wdprime, pointer2)
 
-        elif dot(StrP.K.tail, new_lambda) >= 0 and dot(new_lambda, (-StrP.K.head[0], -StrP.K.head[1])) >= 0:
+        elif c * t >= 0 and c * s >= 0:
             StrP.K.addNode(pointer1, wprime, pointer1.next)
             StrP.K.addNode(wprime, new_lambda, None)
+            pdb.set_trace()
             wdprime = None
 
         else:
@@ -228,7 +240,7 @@ def _convex(i, StrP):
                 StrP.F = pointer4
 
             elif region == 1:
-                pdb.set_trace()
+                #pdb.set_trace()
                 StrP.F = wprime
                 StrP.L = new_lambda
 

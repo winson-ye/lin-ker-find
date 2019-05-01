@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 import math
 from matplotlib.widgets import Button
+import pdb
 
 
 class __BasicNode:
@@ -176,10 +177,12 @@ class K:
 		pointer = self.head
 		count = 1
 		string = "\n"
-		while pointer != None:
+		pdb.set_trace()
+		while pointer != self.tail:
 			string += "Node " + str(count) + ":\n" + str(pointer) + "\n"
 			count += 1
 			pointer = pointer.next
+		string += "Node " + str(count) + ":\n" + str(pointer) + "\n"
 		return string
 
 
@@ -216,7 +219,7 @@ class LineBuilder:
 class StructuredPoly:
 	def __init__(self, list_of_vertices = []):
 		self._pts = self.orientVert(list_of_vertices)
-		self.k = K(None, None)
+		self.K = K(None, None)
 		self.flex_dictionary = self.setFlex()
 		self.polygon = Polygon(self._pts)
 		self.F = None
