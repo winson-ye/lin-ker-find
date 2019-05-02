@@ -215,10 +215,11 @@ def _reflex(i, StrP):
             F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
         StrP.F = pointer4
 
-    pointer5, L_pt_order = StrP.L, 0
+    pointer5 = StrP.L
+    L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
     while pointer5 != StrP.K.tail and L_pt_order == -1:
-        L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
         pointer5 = pointer5.next
+        L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
 
     StrP.L = pointer5
 
@@ -260,12 +261,15 @@ def _convex(i, StrP):
         c = StrP.K.tail[0] * StrP.K.head[1] - StrP.K.head[0] * StrP.K.tail[1]
         t = StrP.K.tail[1] * new_lambda[0] - StrP.K.tail[0] * new_lambda[1]
         s = StrP.K.head[1] * new_lambda[0] - StrP.K.head[0] * new_lambda[1]
+        pdb.set_trace()
 
         if K_edge_int != None:
             #pdb.set_trace()
             wdprime = Node(K_edge_int)
             StrP.K.addNode(pointer1, wprime, pointer1.next)
             StrP.K.addNode(wprime, wdprime, pointer2)
+            if type(StrP.K.tail) != Lambda and findIntersection(StrP.K.tail, StrP.K.head, new_vertex, new_lambda) != None:
+                StrP.K.tail = StrP.K.head.prev
 
         elif c * t >= 0 and c * s >= 0:
             StrP.K.addNode(pointer1, wprime, pointer1.next)
@@ -327,20 +331,22 @@ def _convex(i, StrP):
             elif region == 1:
                 StrP.F = wprime
 
-                pointer5, L_pt_order = wdprime, 0
+                pointer5 = wdprime
+                L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
                 while pointer5 != StrP.K.tail and L_pt_order == -1:
-                    L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
                     pointer5 = pointer5.next
+                    L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
 
                 StrP.L = pointer5
 
     else:
         new_vertex2 = Node(P[i+1])
         if type(StrP.K.tail) != Lambda:
-            pointer5, L_pt_order = StrP.L, 0
+            pointer5 = StrP.L
+            L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
             while pointer5 != StrP.K.tail and L_pt_order == -1:
-                L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
                 pointer5 = pointer5.next
+                L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
 
             StrP.L = pointer5
 
