@@ -300,7 +300,7 @@ def _convex(i, StrP):
         c = StrP.K.tail[0] * StrP.K.head[1] - StrP.K.head[0] * StrP.K.tail[1]
         t = StrP.K.tail[1] * new_lambda[0] - StrP.K.tail[0] * new_lambda[1]
         s = StrP.K.head[1] * new_lambda[0] - StrP.K.head[0] * new_lambda[1]
-        pdb.set_trace()
+        #pdb.set_trace()
 
         if K_edge_int != None:
             #pdb.set_trace()
