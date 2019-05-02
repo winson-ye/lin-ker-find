@@ -23,11 +23,11 @@ ax = fig.add_subplot(111)
 #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
 
 # Crash polygon
-P = StructuredPoly([(18.951612903225804,83.94607843137254), (63.70967741935483,22.67156862745097), (73.38709677419355,86.3970588235294), (58.46774193548387,41.053921568627445), (18.951612903225804,83.94607843137254)])
+#P = StructuredPoly([(18.951612903225804,83.94607843137254), (63.70967741935483,22.67156862745097), (73.38709677419355,86.3970588235294), (58.46774193548387,41.053921568627445), (18.951612903225804,83.94607843137254)])
 
 
 # Jeff wing
-P = StructuredPoly([(15.7258064516129,76.89950980392156), (22.177419354838708,38.90931372549019), (40.927419354838705,26.96078431372548), (65.12096774193549,37.99019607843137), (68.34677419354838,76.89950980392156), (52.62096774193549,68.32107843137254), (41.733870967741936,48.100490196078425), (34.07258064516128,67.09558823529412), (15.7258064516129,76.89950980392156)])
+#P = StructuredPoly([(15.7258064516129,76.89950980392156), (22.177419354838708,38.90931372549019), (40.927419354838705,26.96078431372548), (65.12096774193549,37.99019607843137), (68.34677419354838,76.89950980392156), (52.62096774193549,68.32107843137254), (41.733870967741936,48.100490196078425), (34.07258064516128,67.09558823529412), (15.7258064516129,76.89950980392156)])
 
 
 def getInputPoly(mode, P = None):
@@ -119,8 +119,13 @@ def getKernel(P):
 
         plotA(ax, JeffsAlgorithm(P.K), P.F, P.L, 1, P.polygon, P.K.head, P.K.tail)
 
+
     else:
         ax.set_title("Kernel is the convex polygon!")
+        polygon = P.polygon
+        polygon.set_alpha(0.3)
+        polygon.set_color('r')
+        ax.add_patch(polygon)
         input("Press [enter] to continue.\n")
         return poly
 
@@ -206,8 +211,8 @@ def _reflex(i, StrP):
         pointer4 = StrP.F
         F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
         while F_pt_order == 1:
-            F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
             pointer4 = pointer4.next
+            F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
         StrP.F = pointer4
 
     pointer5, L_pt_order = StrP.L, 0
@@ -284,16 +289,18 @@ def _convex(i, StrP):
             StrP.K.setTail(wdprime)
             StrP.K.makeCircular()
 
+        new_vertex2 = Node(P[i+1])
+
         if wdprime == None:
-            region = findRegion(new_vertex, wprime, Node(P[i+1]))
+            region = findRegion(new_vertex2, wprime, Node(P[i+1]))
             if region == 0:
                 StrP.L = new_lambda
 
                 pointer4 = StrP.F
-                F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
+                F_pt_order = ccw(new_vertex2, pointer4, pointer4.next)
                 while F_pt_order == 1:
-                    F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
                     pointer4 = pointer4.next
+                    F_pt_order = ccw(new_vertex2, pointer4, pointer4.next)
                 StrP.F = pointer4
 
             elif region == 1:
@@ -307,10 +314,10 @@ def _convex(i, StrP):
                 StrP.L = wdprime
 
                 pointer4 = StrP.F
-                F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
+                F_pt_order = ccw(new_vertex2, pointer4, pointer4.next)
                 while F_pt_order == 1:
-                    F_pt_order = ccw(new_vertex, pointer4, pointer4.next)
                     pointer4 = pointer4.next
+                    F_pt_order = ccw(new_vertex2, pointer4, pointer4.next)
                 StrP.F = pointer4
 
             elif region == 0:
@@ -322,16 +329,35 @@ def _convex(i, StrP):
 
                 pointer5, L_pt_order = wdprime, 0
                 while pointer5 != StrP.K.tail and L_pt_order == -1:
-                    L_pt_order = ccw(new_vertex, pointer5.prev, pointer5)
+                    L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
                     pointer5 = pointer5.next
 
                 StrP.L = pointer5
 
-        return 1
+    else:
+        new_vertex2 = Node(P[i+1])
+        if type(StrP.K.tail) != Lambda:
+            pointer5, L_pt_order = StrP.L, 0
+            while pointer5 != StrP.K.tail and L_pt_order == -1:
+                L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
+                pointer5 = pointer5.next
+
+            StrP.L = pointer5
+
+        pointer4 = StrP.F
+        F_pt_order = ccw(new_vertex2, pointer4, pointer4.next)
+        while F_pt_order == 1:
+            pointer4 = pointer4.next
+            F_pt_order = ccw(new_vertex2, pointer4, pointer4.next)
+        StrP.F = pointer4
+
+
+
+    return 1
 
 def main():
 
-    shape = getInputPoly(1, P)
+    shape = getInputPoly(0)
     print(getKernel(shape))
 
     #print(getKernel(P))
