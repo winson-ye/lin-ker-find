@@ -684,22 +684,25 @@ def plotA(ax, ker_tup, F, L, i, shape, head, tail):
     k.set_alpha(0.3)
     k.set_color('r')
     
+    shape.set_alpha(0.5)
+
+
     ax.add_patch(shape)
     ax.add_patch(k)
     
     ax.set_title("drawing K" + str(i))
 
     if type(F) != Lambda:
-        ax.plot(F.coords[0], F.coords[1], marker='d', label='F[' + str(i) + ']', color='r', markersize=12)
+        ax.plot(F.coords[0], F.coords[1], marker='s', label='F[' + str(i) + ']', color='r', alpha=0.7, markersize=8)
 
     if type(L) != Lambda:
-        ax.plot(L.coords[0], L.coords[1], marker='d', label='L[' + str(i) + ']', color='k')
+        ax.plot(L.coords[0], L.coords[1], marker='o', label='L[' + str(i) + ']', color='k', alpha=0.7, markersize=8)
 
     if type(head) != Lambda:
-        ax.plot(head.coords[0], head.coords[1], marker=8, label='H[' + str(i) + ']', markersize=12, color='g')
+        ax.plot(head.coords[0], head.coords[1], marker='*', label='H[' + str(i) + ']', color='g', alpha=0.7, markersize=8)
 
     if type(tail) != Lambda:
-        ax.plot(tail.coords[0], tail.coords[1], marker=9, label='T[' + str(i) + ']', color='w')
+        ax.plot(tail.coords[0], tail.coords[1], marker='d', label='T[' + str(i) + ']', color='c', alpha=0.7, markersize=8)
 
     ax.legend(loc='upper left')
 

@@ -26,8 +26,6 @@ ax = fig.add_subplot(111)
 P = StructuredPoly([(18.951612903225804,83.94607843137254), (63.70967741935483,22.67156862745097), (73.38709677419355,86.3970588235294), (58.46774193548387,41.053921568627445), (18.951612903225804,83.94607843137254)])
 
 
-
-
 def getInputPoly(mode, P = None):
 
     if mode == 0:
@@ -58,6 +56,7 @@ def getInputPoly(mode, P = None):
             lst.append((round(x, 2), round(y, 2)))
 
         p = Polygon(lst)
+        p.set_alpha(0.5)
 
         ax.add_patch(p)
 
@@ -76,6 +75,7 @@ def getInputPoly(mode, P = None):
         lst = [(round(x[0], 2), round(x[1], 2)) for x in P.polygon.get_xy()]
 
         roundPoly = Polygon(lst)
+        roundPoly.set_alpha(0.5)
 
         ax.add_patch(roundPoly)
         input("Press [enter] to continue.\n")
