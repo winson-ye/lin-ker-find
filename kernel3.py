@@ -30,7 +30,7 @@ ax = fig.add_subplot(111)
 #P = StructuredPoly([(15.7258064516129,76.89950980392156), (22.177419354838708,38.90931372549019), (40.927419354838705,26.96078431372548), (65.12096774193549,37.99019607843137), (68.34677419354838,76.89950980392156), (52.62096774193549,68.32107843137254), (41.733870967741936,48.100490196078425), (34.07258064516128,67.09558823529412), (15.7258064516129,76.89950980392156)])
 
 
-P = StructuredPoly(
+#P = StructuredPoly(
 [(48.99193548387096,92.52450980392157),
 (44.55645161290322,66.4828431372549),
 (24.193548387096772,80.26960784313725),
@@ -45,8 +45,7 @@ P = StructuredPoly(
 (56.45161290322581,57.59803921568627),
 (68.34677419354838,78.125),
 (51.814516129032256,66.17647058823529),
-(48.99193548387096,92.52450980392157)
-])
+(48.99193548387096,92.52450980392157)]
 
 
 
@@ -159,6 +158,15 @@ def getKernel(P):
         elif angle[poly[i]] == 1:
             result = _convex(i, P)
         if result == -1:
+            ax.cla()
+
+            ax.set_xlim(XLIM)
+            ax.set_ylim(YLIM)
+
+            ax.set_title("There is no kernel!")
+            polygon = P.polygon
+            ax.add_patch(polygon)
+            input("Press [enter] to continue.\n")
             return Polygon([(-1000, -1000), (-1000.000000001, -1000), (-1000, -1000.0000000001), (-1000, -1000)]).get_xy()
 
         plotA(ax, JeffsAlgorithm(P.K), P.F, P.L, i+1, P.polygon, P.K.head, P.K.tail)
@@ -322,7 +330,7 @@ def _convex(i, StrP):
             wdprime = Node(K_edge_int)
             StrP.K.addNode(pointer1, wprime, wdprime)
             StrP.K.addNode(wprime, wdprime, pointer3)
-            
+
             StrP.K.setHead(pointer3)
             StrP.K.setTail(wdprime)
             StrP.K.makeCircular()
@@ -397,7 +405,7 @@ def _convex(i, StrP):
 
 def main():
 
-    shape = getInputPoly(1, P)
+    shape = getInputPoly(0)
     print(getKernel(shape))
 
     #print(getKernel(P))
