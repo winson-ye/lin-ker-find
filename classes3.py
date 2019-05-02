@@ -667,7 +667,7 @@ def findRegion(wprime, wdprime, v_iplus1):
             print("findRegion:  square_l2_norm_ratio is negative when that's impossible")
 
 def plotA(ax, ker_tup, F, L, i, shape, head, tail):
-    pdb.set_trace()
+    #pdb.set_trace()
 
 
     if type(ker_tup) != tuple:

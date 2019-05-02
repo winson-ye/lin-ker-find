@@ -11,7 +11,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 #winson chomper
-P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
+#P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 
 #chomper
 #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 4), (2, 6), (10, 8), (10, 10), (0, 10)])
@@ -23,7 +23,7 @@ P = StructuredPoly([(0,0), (10,10), (0,20), (20,10), (0,0)])
 #P = StructuredPoly([(0, 10), (0, 0), (10, 0), (10, 2), (2, 2), (2, 8), (10, 8), (10, 10), (0, 10)])
 
 # Crash polygon
-#P = StructuredPoly([(18.951612903225804,83.94607843137254), (63.70967741935483,22.67156862745097), (73.38709677419355,86.3970588235294), (58.46774193548387,41.053921568627445), (18.951612903225804,83.94607843137254)])
+P = StructuredPoly([(18.951612903225804,83.94607843137254), (63.70967741935483,22.67156862745097), (73.38709677419355,86.3970588235294), (58.46774193548387,41.053921568627445), (18.951612903225804,83.94607843137254)])
 
 
 
@@ -55,7 +55,7 @@ def getInputPoly(mode, P = None):
 
         lst = []
         for x,y in zip(linebuilder.xs, linebuilder.ys):
-            lst.append((x, y))
+            lst.append((round(x, 2), round(y, 2)))
 
         p = Polygon(lst)
 
@@ -73,10 +73,14 @@ def getInputPoly(mode, P = None):
         ax.set_xlim(XLIM)
         ax.set_ylim(YLIM)
 
-        ax.add_patch(P.polygon)
+        lst = [(round(x[0], 2), round(x[1], 2)) for x in P.polygon.get_xy()]
+
+        roundPoly = Polygon(lst)
+
+        ax.add_patch(roundPoly)
         input("Press [enter] to continue.\n")
 
-        return P
+        return StructuredPoly(lst)
 
 
 def getKernel(P):
@@ -223,6 +227,7 @@ def _convex(i, StrP):
     new_lambda.prev, new_vertex.next = new_vertex, new_lambda
 
     if ccw(move(new_vertex, StrP.L), new_vertex, new_lambda) != 1:
+        #pdb.set_trace()
         pointer1, K_edge_int = StrP.L, None
         while pointer1 != StrP.F and K_edge_int == None:
             K_edge_int = findIntersection(pointer1.prev, pointer1, new_vertex, new_lambda)
