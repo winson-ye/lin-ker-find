@@ -30,6 +30,29 @@ ax = fig.add_subplot(111)
 #P = StructuredPoly([(15.7258064516129,76.89950980392156), (22.177419354838708,38.90931372549019), (40.927419354838705,26.96078431372548), (65.12096774193549,37.99019607843137), (68.34677419354838,76.89950980392156), (52.62096774193549,68.32107843137254), (41.733870967741936,48.100490196078425), (34.07258064516128,67.09558823529412), (15.7258064516129,76.89950980392156)])
 
 
+P = StructuredPoly(
+[(48.99193548387096,92.52450980392157),
+(44.55645161290322,66.4828431372549),
+(24.193548387096772,80.26960784313725),
+(34.27419354838709,55.45343137254902),
+(18.346774193548388,49.325980392156865),
+(36.29032258064515,44.424019607843135),
+(36.29032258064515,28.79901960784313),
+(43.95161290322581,40.44117647058823),
+(53.0241935483871,25.122549019607835),
+(53.62903225806451,39.522058823529406),
+(67.54032258064515,37.99019607843137),
+(56.45161290322581,57.59803921568627),
+(68.34677419354838,78.125),
+(51.814516129032256,66.17647058823529),
+(48.99193548387096,92.52450980392157)
+])
+
+
+
+
+
+
 def getInputPoly(mode, P = None):
 
     if mode == 0:
@@ -172,16 +195,24 @@ def _reflex(i, StrP):
             pointer2 = pointer2.prev
 
         #pdb.set_trace()
-        H_slope, T_slope = slope(StrP.K.head, StrP.K.head.next), slope(StrP.K.tail.prev, StrP.K.tail)
-        edge_slope = slope(new_lambda, new_vertex)
-        c = StrP.K.tail[0] * StrP.K.head[1] - StrP.K.head[0] * StrP.K.tail[1]
-        t = StrP.K.tail[0] * new_lambda[1] - StrP.K.tail[1] * new_lambda[0]
-        s = StrP.K.head[0] * new_lambda[1] - StrP.K.head[1] * new_lambda[0]
+        #H_slope, T_slope = slope(StrP.K.head, StrP.K.head.next), slope(StrP.K.tail.prev, StrP.K.tail)
+        #edge_slope = slope(new_lambda, new_vertex)
+        if type(StrP.K.tail) == Lambda:
+            c = StrP.K.tail[0] * StrP.K.head[1] - StrP.K.head[0] * StrP.K.tail[1]
+            t = StrP.K.tail[0] * new_lambda[1] - StrP.K.tail[1] * new_lambda[0]
+            s = StrP.K.head[0] * new_lambda[1] - StrP.K.head[1] * new_lambda[0]
+        else:
+            c, t, s = -1, 1, 1
 
         if K_edge_int != None:
             wdprime = Node(K_edge_int)
             StrP.K.addNode(pointer2, wdprime, pointer1)
             StrP.K.addNode(wdprime, wprime, pointer1)
+            if type(StrP.K.tail) != Lambda and findIntersection(StrP.K.tail, StrP.K.head, new_vertex, new_lambda) != None:
+                StrP.K.tail = StrP.K.head.prev
+            elif type(StrP.K.tail) != Lambda and ccw(StrP.K.head, Node(P[i]), new_vertex) == ccw(StrP.K.tail, Node(P[i]), new_vertex) == -1:
+                StrP.head = wprime
+                StrP.tail = wdprime
 
         elif c * t >= 0 and c * s >= 0:
             StrP.K.addNode(pointer2, wprime, pointer1)
@@ -270,9 +301,12 @@ def _convex(i, StrP):
             StrP.K.addNode(wprime, wdprime, pointer2)
             if type(StrP.K.tail) != Lambda and findIntersection(StrP.K.tail, StrP.K.head, new_vertex, new_lambda) != None:
                 StrP.K.tail = StrP.K.head.prev
+            elif type(StrP.K.tail) != Lambda and ccw(StrP.K.head, Node(P[i+1]), new_vertex) == ccw(StrP.K.tail, Node(P[i+1]), new_vertex) == 1:
+                StrP.head = wdprime
+                StrP.tail = wprime
 
         elif c * t >= 0 and c * s >= 0:
-            StrP.K.addNode(pointer1, wprime, pointer1.next)
+            StrP.K.addNode(pointer1, wprime, new_lambda)
             StrP.K.addNode(wprime, new_lambda, None)
             #pdb.set_trace()
             wdprime = None
@@ -296,7 +330,7 @@ def _convex(i, StrP):
         new_vertex2 = Node(P[i+1])
 
         if wdprime == None:
-            region = findRegion(new_vertex2, wprime, Node(P[i+1]))
+            region = findRegion(new_vertex, wprime, new_vertex2)
             if region == 0:
                 StrP.L = new_lambda
 
@@ -313,7 +347,7 @@ def _convex(i, StrP):
                 StrP.L = new_lambda
 
         else:
-            region = findRegion(wprime, wdprime, Node(P[i+1]))
+            region = findRegion(wprime, wdprime, new_vertex2)
             if region == -1:
                 StrP.L = wdprime
 
@@ -334,8 +368,8 @@ def _convex(i, StrP):
                 pointer5 = wdprime
                 L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
                 while pointer5 != StrP.K.tail and L_pt_order == -1:
-                    pointer5 = pointer5.next
                     L_pt_order = ccw(new_vertex2, pointer5.prev, pointer5)
+                    pointer5 = pointer5.next
 
                 StrP.L = pointer5
 
@@ -363,7 +397,7 @@ def _convex(i, StrP):
 
 def main():
 
-    shape = getInputPoly(0)
+    shape = getInputPoly(1, P)
     print(getKernel(shape))
 
     #print(getKernel(P))

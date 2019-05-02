@@ -834,6 +834,9 @@ def JeffsAlgorithm(K):
 
 
     elif type(K.head) != Lambda and type(K.tail) != Lambda:
+
+        print('im tyapped')
+
         bounded_polygon_list = []
 
         cur_node = K.head
@@ -844,6 +847,7 @@ def JeffsAlgorithm(K):
         bounded_polygon_list.append((K.tail[0], K.tail[1]))
         bounded_polygon_list.append((K.head[0], K.head[1]))
 
+        print('exited while of JA')
         return (Polygon(bounded_polygon_list), 1)
 
     else:
